@@ -11,9 +11,11 @@ $w.onReady(async function () {
     getDataWithGetMethod()
         .then(data => {
             console.log("가져온 데이터:", data);
-
+            for(let i=0;i<data.data.length;i++) {
+              data.data[i]._id = `${i+1}`
+            }
             // Repeater에 데이터 연결
-            $w('#listRepeater').data = data.content;
+            $w('#listRepeater').data = data.data;
         initComponents()
     });
 });
@@ -34,11 +36,11 @@ function initComponents() {
   }
   
   function initItemTitle($item, itemData) {
-    $item("#title").text = itemData.title;
+    $item("#title").text = itemData.projectName;
   }
 
   function initItemAddress($item, itemData) {
-    $item("#text14").text = itemData.address;
+    $item("#text14").text = itemData.startDate + " ~ " + itemData.endDate;
   }
 
   function initItemButtion($item, itemData) {
