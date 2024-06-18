@@ -36,7 +36,6 @@
 //   },
 //   "message": "모집 공고 상세 화면 - 일반 반환 완료"
 // }
-import { getApiKey, kakaoApiKey } from "backend/apikey.jsw";
 
 
 // 페이지가 로드될 때 실행됩니다.
