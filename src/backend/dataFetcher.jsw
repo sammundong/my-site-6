@@ -1,0 +1,24 @@
+import { fetch } from 'wix-fetch';
+
+// 외부 API에서 데이터를 가져오는 함수
+export async function getDataWithGetMethod() {
+        const url = 'http://43.203.86.121/api/project/list'; // 올바른 엔드포인트 확인
+        const options = {
+            method: 'GET', // GET 메서드 사용
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjA5NzA5MTB9.yg1G0zizw-BoGxcWGUPNgudBhi7CLsM1359eHYMOujQ' // 필요한 경우 인증 토큰 추가
+            }
+        };
+        return await fetch(url, options)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .catch(error => {
+            console.error("데이터 가져오기 실패:", error);
+            throw new Error('데이터를 가져오는 데 실패했습니다.');
+        });
+    }
