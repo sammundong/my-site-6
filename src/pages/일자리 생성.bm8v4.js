@@ -114,11 +114,11 @@ async function formSubmit(event) {
 
     // 외부 API에 데이터 삽입 요청
     fetch('https://asdfdsas.p-e.kr/api/project', options)
-        .then(response => response.json())
+        .then(response => console.log(response))
         .then(data => {
             // 삽입 성공 시 처리
-            const fullData = { ...project, ...data };
-            console.log("데이터 삽입 성공:", fullData);
+            // const fullData = { ...project, ...data };
+            console.log("데이터 삽입 성공:", data);
             $w('#text142').text = "회원 정보가 성공적으로 등록되었습니다.";
         })
         .catch((error) => {
