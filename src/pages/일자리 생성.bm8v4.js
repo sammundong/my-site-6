@@ -114,7 +114,7 @@ async function formSubmit(event) {
 
     // 외부 API에 데이터 삽입 요청
     fetch('https://asdfdsas.p-e.kr/api/project', options)
-        .then(response => console.log(response))
+        .then(response => response.json())
         .then(data => {
             // 삽입 성공 시 처리
             // const fullData = { ...project, ...data };
