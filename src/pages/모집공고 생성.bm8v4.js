@@ -119,12 +119,12 @@ async function formSubmit(event) {
             // 삽입 성공 시 처리
             // const fullData = { ...project, ...data };
             console.log("데이터 삽입 성공:", data);
-            $w('#text142').text = "회원 정보가 성공적으로 등록되었습니다.";
+            //$w('#text142').text = "회원 정보가 성공적으로 등록되었습니다.";
         })
         .catch((error) => {
             // 삽입 실패 시 처리
             console.error("데이터 삽입 실패:", error);
-            $w('#text142').text = "회원 정보 등록에 실패했습니다.";
+            //$w('#text142').text = "회원 정보 등록에 실패했습니다.";
         });
 }
 

@@ -8,7 +8,7 @@ $w.onReady(async function () {
     // To select an element by ID use: $w('#elementID')
     // Click 'Preview' to run your code
     $w("#listRepeater").data = []
-    getDataWithGetMethod()
+    getDataWithGetMethod('https://asdfdsas.p-e.kr/api/project/list?projectStatus=COMPLETED')
         .then(data => {
             console.log("가져온 데이터:", data);
             for(let i=0;i<data.data.length;i++) {
@@ -16,6 +16,7 @@ $w.onReady(async function () {
             }
             // Repeater에 데이터 연결
             $w('#listRepeater').data = data.data;
+            console.log($w('#listRepeater').data)
         initComponents()
     });
 });
@@ -28,7 +29,6 @@ function initComponents() {
   function initRepeater() {
     $w("#listRepeater").onItemReady(($item, itemData, index) => {
       //initItemBackground($item, itemData)
-  
       initItemTitle($item, itemData)
       initItemAddress($item, itemData)
       initItemButtion($item, itemData)
@@ -45,6 +45,9 @@ function initComponents() {
 
   function initItemButtion($item, itemData) {
     $item("#MoreButton").onClick(() => {
-      wixLocation.to(`/jobs-4?jobPostId=${itemData.jobPostId}`);
+      wixLocation.to(`/jobs-4?jobPostId=${itemData.projectId}`);
+    })
+    $item("#button9").onClick(() => {
+      wixLocation.to(`/general-4?jobPostId=${itemData.projectId}`);
     })
   }
