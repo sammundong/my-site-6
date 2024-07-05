@@ -7,15 +7,19 @@ $w.onReady(async function () {
     // Write your JavaScript here
     // To select an element by ID use: $w('#elementID')
     // Click 'Preview' to run your code
-    $w("#listRepeater").data = []
     const query = wixLocation.query;
+    $w("#listRepeater").data = []
     getDataWithGetMethod(`https://asdfdsas.p-e.kr/api/job-post/company/${query.jobPostId}`)
         .then(data => {
             console.log("가져온 데이터:", data);
             // Repeater에 데이터 연결
-            $w('#listRepeater').data = data.data.workDateResponseList;
-            console.log(data.data.workDateResponseList);
-        initComponents()
+            for(let i=0;i<data.data.workDateResponseList.length;i++) {
+              data.data.workDateResponseList[i]._id = `${i+1}`
+            }
+            const workDateResponseList_copy = data.data.workDateResponseList;
+            $w("#listRepeater").data = workDateResponseList_copy
+            console.log($w("#listRepeater").data)
+            initComponents()
     });
 });
 
@@ -34,13 +38,11 @@ function initComponents() {
   }
   
   function initItemTitle($item, itemData) {
-    console.log(`${itemData.workDateId}`);
     $item("#text121").text = `${itemData.workDateId}`;
   }
 
   function initItemDate($item, itemData) {
-    console.log(itemData.workDateResponseList.date);
-    $item("#text122").text = itemData.workDateResponseList.date;
+    $item("#text122").text = itemData.date;
   }
 
   /* function initItemButtion($item, itemData) {

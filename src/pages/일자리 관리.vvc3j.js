@@ -16,7 +16,6 @@ $w.onReady(async function () {
             }
             // Repeater에 데이터 연결
             $w('#listRepeater').data = data.data;
-            console.log($w('#listRepeater').data)
         initComponents()
     });
 });
