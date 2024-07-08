@@ -37,6 +37,7 @@
 //   "message": "모집 공고 상세 화면 - 일반 반환 완료"
 // }
 
+import wixLocation from 'wix-location-frontend';
 
 // 페이지가 로드될 때 실행됩니다.
 $w.onReady(function () {
@@ -46,7 +47,7 @@ $w.onReady(function () {
 // 폼 제출 함수
 async function formSubmit(event) {
     //event.preventDefault(); // 기본 폼 제출 동작 방지
-
+    const query = wixLocation.query;
     // 입력 필드 값 가져오기
     const projectName = $w('#input1').value;
     const tech = $w('#dropdown1').value;
@@ -79,28 +80,26 @@ async function formSubmit(event) {
 
     // 새로운 데이터 객체 생성
     const project = {
-        //"jobPostId": jobPostId,
+        "jobPostId": query.jobPostId,
         "projectName" : projectName,
-        //"tech" : tech,
-        //"startTime" : startTime,
-        //"endTime" : endTime,
-        "startDate" : startDate,
-        "endDate" : endDate,
+        "tech" : tech,
+        "startTime" : startTime,
+        "endTime" : endTime,
         "address" : address.formatted,
         "latitude" : latitude,
-        "longitude" : longitude
-        //"distance": null,
-        //"meal" : meal,
-        //"pickup" : pickup,
-        //"pickupAddressList" : pickupAddressList,
-        //"park" : park,
-        //"parkDetail" : parkDetail,
-        //"preparation" : preparation,
-        //"workDateResponseList" : workDateResponseList,
-        //"companyName" : companyName,
-        //"manager" : manager,
-        //"phone" : phone,
-        //"imageUrls" : []
+        "longitude" : longitude,
+        "distance": null,
+        "meal" : meal,
+        "pickup" : pickup,
+        "pickupAddressList" : pickupAddressList,
+        "park" : park,
+        "parkDetail" : parkDetail,
+        "preparation" : preparation,
+        "workDateResponseList" : workDateResponseList,
+        "companyName" : companyName,
+        "manager" : manager,
+        "phone" : phone,
+        "imageUrls" : []
     };
     console.log(project)
     const options = {

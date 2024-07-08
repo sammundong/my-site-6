@@ -8,7 +8,7 @@ $w.onReady(async function () {
     // To select an element by ID use: $w('#elementID')
     // Click 'Preview' to run your code
     $w("#listRepeater").data = []
-    getDataWithGetMethod('https://asdfdsas.p-e.kr/api/project/list?projectStatus=COMPLETED')
+    getDataWithGetMethod('https://asdfdsas.p-e.kr/api/project/list?projectStatus=IN_PROGRESS')
         .then(data => {
             console.log("가져온 데이터:", data);
             for(let i=0;i<data.data.length;i++) {
@@ -44,9 +44,9 @@ function initComponents() {
 
   function initItemButtion($item, itemData) {
     $item("#MoreButton").onClick(() => {
-      wixLocation.to(`/jobs-4?jobPostId=${itemData.projectId}`);
+      wixLocation.to(`/jobs-4?projectId=${itemData.projectId}`);
     })
     $item("#button9").onClick(() => {
-      wixLocation.to(`/general-4?jobPostId=${itemData.projectId}`);
+      wixLocation.to(`/general-4?projectId=${itemData.projectId}`);
     })
   }

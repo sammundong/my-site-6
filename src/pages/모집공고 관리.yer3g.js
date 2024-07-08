@@ -9,12 +9,12 @@ $w.onReady(async function () {
     // Click 'Preview' to run your code
     const query = wixLocation.query;
     $w("#listRepeater").data = []
-    getDataWithGetMethod(`https://asdfdsas.p-e.kr/api/job-post/company/${query.jobPostId}`)
+    getDataWithGetMethod(`https://asdfdsas.p-e.kr/api/job-post/company/list/${query.projectId}?jobPostStatus=IN_PROGRESS&page=0&size=10`)
         .then(data => {
             console.log("가져온 데이터:", data);
             // Repeater에 데이터 연결
-            for(let i=0;i<data.data.workDateResponseList.length;i++) {
-              data.data.workDateResponseList[i]._id = `${i+1}`
+            for(let i=0;i<data.content.length;i++) {
+              data.content[i]._id = `${i+1}`
             }
             const workDateResponseList_copy = data.data.workDateResponseList;
             $w("#listRepeater").data = workDateResponseList_copy
@@ -33,7 +33,7 @@ function initComponents() {
       //initItemBackground($item, itemData)
       initItemTitle($item, itemData)
       initItemDate($item, itemData)
-      //initItemButtion($item, itemData)
+      initItemButtion($item, itemData)
     });
   }
   
@@ -45,11 +45,12 @@ function initComponents() {
     $item("#text122").text = itemData.date;
   }
 
-  /* function initItemButtion($item, itemData) {
-    $item("#MoreButton").onClick(() => {
+  function initItemButtion($item, itemData) {
+    /* item("#MoreButton").onClick(() => {
       wixLocation.to(`/jobs-4?jobPostId=${itemData.jobPostId}`);
+    }) */
+    $item("#button8").onClick(() => {
+      wixLocation.to(`/jobs-2?jobPostId=${itemData.jobPostId}`);
     })
-    $item("#button9").onClick(() => {
-      wixLocation.to(`/general-4?jobPostId=${itemData.jobPostId}`);
-    })
-  } */
+  } 
+ 
