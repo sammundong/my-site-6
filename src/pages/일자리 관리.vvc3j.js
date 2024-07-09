@@ -8,7 +8,7 @@ $w.onReady(async function () {
     // To select an element by ID use: $w('#elementID')
     // Click 'Preview' to run your code
     $w("#listRepeater").data = []
-    getDataWithGetMethod('https://asdfdsas.p-e.kr/api/project/list?projectStatus=IN_PROGRESS')
+    getDataWithGetMethod('https://asdfdsas.p-e.kr/api/project/list?projectStatus=COMPLETED')
         .then(data => {
             console.log("가져온 데이터:", data);
             for(let i=0;i<data.data.length;i++) {
