@@ -29,38 +29,35 @@
   "projectId": 1
 } */
 
+import { query } from 'wix-data';
 import wixLocation from 'wix-location-frontend';
 
-let i = 1;
 // 페이지가 로드될 때 실행됩니다.
 $w.onReady(function () {
     $w("#button8").onClick(formSubmit);
 });
 
 // 폼 제출 함수
-async function formSubmit(event) {
+async function formSubmit() {
     //event.preventDefault(); // 기본 폼 제출 동작 방지
-    
+    const query = wixLocation.query;
     // 입력 필드 값 가져오기
     const title = $w('#input1').value;
     const tech = $w('#dropdown1').value;
-    const people = $w('#input2').value;
-    const money = $w('#input3').value;
-    const startDate = $w('#input8').value
-    const endDate = $w('#input8').value
-    const workDateResponseList = []
-    workDateResponseList.push({ 'workDateId' : 1,
-                                'date' : $w('#input8').value});
+    const recruitNum = parseInt($w('#input2').value, 10);
+    const money = parseInt($w('#input3').value, 10);
+    const dateList = []
+    dateList.push($w('#input8').value);
     const startTime = $w('#timePicker1').value;
     const endTime = $w('#timePicker2').value;
     const address = $w('#addressInput1').value;
-    const pickup = $w('#radioGroup1').value;
+    const pickup = ($w('#radioGroup1').value.toLowerCase() === 'false') ? false : true;
     const pickupAddressList = []
-    if (pickup == "True") {
-        pickupAddressList.push($w('#addressInput2').value)
+    if (pickup == true) {
+        pickupAddressList.push($w('#addressInput2').value.formatted)
     }
-    const meal = $w('#radioGroup2').value;
-    const park = $w('#radioGroup3').value;
+    const meal = ($w('#radioGroup2').value.toLowerCase() === 'false') ? false : true;
+    const park = ($w('#radioGroup3').value.toLowerCase() === 'false') ? false : $w('#radioGroup3').value;
     const parkDetail = $w('#input4').value;
     const preparation = $w('#input5').value;
     const companyName = $w('#input9').value;
@@ -70,14 +67,14 @@ async function formSubmit(event) {
     const latitude = address.location.latitude;
     const longitude = address.location.longitude;
  
-
+    console.log(dateList)
     // 새로운 데이터 객체 생성
     const project = {
         "title" : title,
         "tech" : tech,
         "startTime" : startTime,
         "endTime" : endTime,
-        "recuitNum" : people,
+        "recruitNum" : recruitNum,
         "wage" : money,
         "preparation" : preparation,
         "parkDetail" : parkDetail,
@@ -87,30 +84,34 @@ async function formSubmit(event) {
         "address" : address.formatted,
         "latitude" : latitude,
         "longitude" : longitude,
-        "dateList" : workDateResponseList,
+        "dateList" : dateList,
         "pickupList" : pickupAddressList,
         "managerName" : manager,
         "phone" : phone,
-        "projectId" : i
+        "projectId" : parseInt(query.projectId, 10)
     };
+
+    const formData = new FormData();
+    formData.append('request', JSON.stringify(project));
+    //formData.append('imageList', null);
+
     console.log(project)
     const options = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
             'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjA5NzA5MTB9.yg1G0zizw-BoGxcWGUPNgudBhi7CLsM1359eHYMOujQ'
         },
-        body: JSON.stringify(project)
+        body: formData
     };
 
     // 외부 API에 데이터 삽입 요청
-    fetch('https://asdfdsas.p-e.kr/api/project', options)
+    fetch(`https://asdfdsas.p-e.kr/api/job-post/company`, options)
         .then(response => response.json())
         .then(data => {
             // 삽입 성공 시 처리
             // const fullData = { ...project, ...data };
             console.log("데이터 삽입 성공:", data);
-            i++;
             //$w('#text142').text = "회원 정보가 성공적으로 등록되었습니다.";
         })
         .catch((error) => {

@@ -1,4 +1,5 @@
 import { getDataWithGetMethod } from "backend/dataFetcher";
+import { query } from "wix-data";
 import wixLocation from 'wix-location-frontend';
 // API Reference: https://www.wix.com/velo/reference/api-overview/introduction
 // “Hello, World!” Example: https://learn-code.wix.com/en/article/hello-world
@@ -19,6 +20,10 @@ $w.onReady(async function () {
 
     $w('#button14').style.color = "#C7C7C7";
     $w('#button14').style.borderColor = "#C7C7C7";
+
+    $w("#button8").onClick(() => {
+      wixLocation.to(`/jobs-2?projectId=${query.projectId}`);
+    })
     
 
     $w('#button12').onClick( (event) => {
@@ -135,8 +140,5 @@ function initComponents() {
     /* item("#MoreButton").onClick(() => {
       wixLocation.to(`/jobs-4?jobPostId=${itemData.jobPostId}`);
     }) */
-    $item("#button8").onClick(() => {
-      wixLocation.to(`/jobs-2?jobPostId=${itemData.jobPostId}`);
-    })
   } 
  
