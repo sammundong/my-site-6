@@ -60,9 +60,9 @@ async function formSubmit() {
     const park = ($w('#radioGroup3').value.toLowerCase() === 'false') ? false : $w('#radioGroup3').value;
     const parkDetail = $w('#input4').value;
     const preparation = $w('#input5').value;
-    const companyName = $w('#input9').value;
     const manager = $w('#input6').value;
     const phone = $w('#input7').value;
+    const image = $w("#uploadButton1").value
     
     const latitude = address.location.latitude;
     const longitude = address.location.longitude;
@@ -93,7 +93,7 @@ async function formSubmit() {
 
     const formData = new FormData();
     formData.append('request', JSON.stringify(project));
-    //formData.append('imageList', null);
+    formData.append('imageList', '');
 
     console.log(project)
     const options = {
