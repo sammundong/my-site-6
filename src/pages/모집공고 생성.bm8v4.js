@@ -69,7 +69,7 @@ async function formSubmit() {
  
     console.log(dateList)
     // 새로운 데이터 객체 생성
-    const project = {
+    const request = {
         "title" : title,
         "tech" : tech,
         "startTime" : startTime,
@@ -92,15 +92,15 @@ async function formSubmit() {
     };
 
     const formData = new FormData();
-    formData.append('request', JSON.stringify(project));
-    formData.append('imageList', '');
+    formData.append('request', JSON.stringify(request));
+    // formData.append('imageList', "");
 
-    console.log(project)
+    console.log(request)
     const options = {
         method: 'POST',
         headers: {
             'Content-Type': 'multipart/form-data',
-            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjA5NzA5MTB9.yg1G0zizw-BoGxcWGUPNgudBhi7CLsM1359eHYMOujQ'
+            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI'
         },
         body: formData
     };
