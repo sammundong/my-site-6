@@ -88,12 +88,20 @@ async function formSubmit() {
         "pickupList" : pickupAddressList,
         "managerName" : manager,
         "phone" : phone,
-        "projectId" : parseInt(query.projectId, 10)
+        "projectId" : 1
+        //"projectId" : parseInt(query.projectId, 10)
     };
 
+    const data = {
+    
+        request : request
+    }
+
     const formData = new FormData();
-    formData.append('request', JSON.stringify(request));
-    // formData.append('imageList', "");
+    formData.append('request', new Blob([JSON.stringify(data.request)], {
+        type: "application/json",
+      }));
+    //formData.append('imageList', "");
 
     console.log(request)
     const options = {
