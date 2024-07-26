@@ -31,6 +31,7 @@
 
 import { query } from 'wix-data';
 import wixLocation from 'wix-location-frontend';
+//import { fetch } from 'wix-fetch';
 
 // 페이지가 로드될 때 실행됩니다.
 $w.onReady(function () {
@@ -64,6 +65,11 @@ async function formSubmit() {
     const phone = $w('#input7').value;
     const image = $w("#uploadButton1").value
     
+    let imageList = null;
+    imageList = imageList ? imageList : [];
+
+
+
     const latitude = address.location.latitude;
     const longitude = address.location.longitude;
  
@@ -80,7 +86,7 @@ async function formSubmit() {
         "parkDetail" : parkDetail,
         "meal" : meal,
         "pickup" : pickup,
-        "park" : park,
+        "park" : "NONE",//park,
         "address" : address.formatted,
         "latitude" : latitude,
         "longitude" : longitude,
@@ -92,8 +98,7 @@ async function formSubmit() {
         //"projectId" : parseInt(query.projectId, 10)
     };
 
-    const data = {
-    
+    const data = {   
         request : request
     }
 
@@ -101,13 +106,13 @@ async function formSubmit() {
     formData.append('request', new Blob([JSON.stringify(data.request)], {
         type: "application/json",
       }));
-    //formData.append('imageList', "");
+    formData.append('imageList', JSON.stringify(imageList));
 
     console.log(request)
     const options = {
         method: 'POST',
         headers: {
-            'Content-Type': 'multipart/form-data',
+            //'Content-Type': 'multipart/form-data',
             'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI'
         },
         body: formData
