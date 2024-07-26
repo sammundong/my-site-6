@@ -1,8 +1,8 @@
 import { getDataWithGetMethod } from "backend/dataFetcher";
-import { query } from "wix-data";
 import wixLocation from 'wix-location-frontend';
 // API Reference: https://www.wix.com/velo/reference/api-overview/introduction
 // “Hello, World!” Example: https://learn-code.wix.com/en/article/hello-world
+const query = wixLocation.query;
 
 $w.onReady(async function () {
     // Write your JavaScript here
@@ -10,12 +10,13 @@ $w.onReady(async function () {
     // Click 'Preview' to run your code
 
     let condition = "PLANNED";
-    const query = wixLocation.query;
-
 
     $w('#section1').collapse();
     $w('#section2').collapse();
-    $w('#button13').style.color = "#C7C7C7";
+    $w('#button12').collapse();
+    $w('#button13').collapse();
+    $w('#button14').collapse();
+    /* $w('#button13').style.color = "#C7C7C7";
     $w('#button13').style.borderColor = "#C7C7C7";
 
     $w('#button14').style.color = "#C7C7C7";
@@ -94,7 +95,7 @@ $w.onReady(async function () {
         $w('#section3').expand();
 
         console.log(clickedElement.id,"onclick");
-    })
+    }) */
     gDWGM(query,condition);
 });
 
@@ -137,8 +138,11 @@ function initComponents() {
   }
 
   function initItemButtion($item, itemData) {
-    /* item("#MoreButton").onClick(() => {
+    $item("#MoreButton").onClick(() => {
       wixLocation.to(`/jobs-4?jobPostId=${itemData.jobPostId}`);
-    }) */
+    }) 
+      $item("#button22").onClick(() => {
+        wixLocation.to(`/jobs-2?projectId=${query.projectId}`);
+      })
   } 
  

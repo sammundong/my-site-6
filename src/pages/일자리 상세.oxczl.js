@@ -9,13 +9,13 @@ import { getApiKey, kakaoApiKey } from "backend/apikey.jsw";
 $w.onReady(async function () {
     // Write your JavaScript here
     const query = wixLocation.query;
-    const url = "https://asdfdsas.p-e.kr/api/job-post/worker/"+`${query.jobPostId}`
+    const url = "https://asdfdsas.p-e.kr/api/job-post/company/"+`${query.jobPostId}`
     var { data, message } = await getDataWithGetMethod({
         url: url,
       });
     
     // title
-    $w("#title").text = data.title
+    $w("#text126").text = query.title
     $w("#text134").text = data.title
 
     // 근무 환경

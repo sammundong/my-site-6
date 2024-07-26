@@ -43,9 +43,9 @@ function initComponents() {
   }
 
   function initItemButtion($item, itemData) {
-    $item("#MoreButton").onClick(() => {
+    /* $item("#MoreButton").onClick(() => {
       wixLocation.to(`/jobs-4?projectId=${itemData.projectId}`);
-    })
+    }) */
     $item("#button9").onClick(() => {
       wixLocation.to(`/general-4?projectId=${itemData.projectId}`);
     })
