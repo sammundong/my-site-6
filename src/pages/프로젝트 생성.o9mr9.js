@@ -51,7 +51,7 @@ async function formSubmit(event) {
     // 입력 필드 값 가져오기
     const projectName = $w('#input1').value;
     const startDate = $w('#input8').value
-    const endDate = $w('#input8').value
+    const endDate = $w('#input9').value
     const address = $w('#addressInput1').value;
     
     const latitude = address.location.latitude;

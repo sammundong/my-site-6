@@ -97,6 +97,10 @@ $w.onReady(async function () {
         console.log(clickedElement.id,"onclick");
     }) */
     gDWGM(query,condition);
+
+    $w("#button22").onClick(() => {
+      wixLocation.to(`/jobs-2?projectId=${query.projectId}`);
+    })
 });
 
 function gDWGM(query, condition) {
@@ -141,8 +145,8 @@ function initComponents() {
     $item("#MoreButton").onClick(() => {
       wixLocation.to(`/jobs-4?jobPostId=${itemData.jobPostId}`);
     }) 
-      $item("#button22").onClick(() => {
-        wixLocation.to(`/jobs-2?projectId=${query.projectId}`);
-      })
+    $item("#button23").onClick(() => {
+      wixLocation.to(`/jobs-2?projectId=${query.projectId}`);
+    })
   } 
  

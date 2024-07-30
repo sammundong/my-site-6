@@ -86,7 +86,7 @@ async function formSubmit() {
         "parkDetail" : parkDetail,
         "meal" : meal,
         "pickup" : pickup,
-        "park" : "NONE",//park,
+        "park" : park,
         "address" : address.formatted,
         "latitude" : latitude,
         "longitude" : longitude,
@@ -94,8 +94,8 @@ async function formSubmit() {
         "pickupList" : pickupAddressList,
         "managerName" : manager,
         "phone" : phone,
-        "projectId" : 1
-        //"projectId" : parseInt(query.projectId, 10)
+        //"projectId" : 1
+        "projectId" : parseInt(query.projectId, 10)
     };
 
     const data = {   
