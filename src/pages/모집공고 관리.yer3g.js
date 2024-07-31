@@ -4,12 +4,12 @@ import wixLocation from 'wix-location-frontend';
 // “Hello, World!” Example: https://learn-code.wix.com/en/article/hello-world
 const query = wixLocation.query;
 
+let combinedContent = [];
+
 $w.onReady(async function () {
     // Write your JavaScript here
     // To select an element by ID use: $w('#elementID')
     // Click 'Preview' to run your code
-
-    let condition = "PLANNED";
 
     $w('#section1').collapse();
     $w('#section2').collapse();
@@ -96,28 +96,37 @@ $w.onReady(async function () {
 
         console.log(clickedElement.id,"onclick");
     }) */
-    gDWGM(query,condition);
+    $w("#repeater3").data = []
+    await gDWGM(query, "IN_PROGRESS");
+    await gDWGM(query, "PLANNED");
+    await gDWGM(query, "COMPLETED");
+
+    $w("#repeater3").data = combinedContent;
+    console.log($w("#repeater3").data)
+    initComponents();
 
     $w("#button22").onClick(() => {
       wixLocation.to(`/jobs-2?projectId=${query.projectId}`);
     })
 });
 
-function gDWGM(query, condition) {
-  $w("#repeater3").data = []
-  getDataWithGetMethod(`https://asdfdsas.p-e.kr/api/job-post/company/list/${query.projectId}?jobPostStatus=${condition}&page=0&size=10`)
-      .then(data => {
-          console.log("가져온 데이터:", data);
-          // Repeater에 데이터 연결
-          for(let i=0;i<data.data.content.length;i++) {
-            data.data.content[i]._id = `${i+1}`
-          }
-          const content = data.data.content;
-          $w(`#repeater3`).data = content
-          console.log($w("#repeater3").data)
-          initComponents()
-        }
-  )}
+async function gDWGM(query, condition) {
+  const data = await getDataWithGetMethod(`https://asdfdsas.p-e.kr/api/job-post/company/list/${query.projectId}?jobPostStatus=${condition}&page=0&size=10`);
+    console.log("가져온 데이터:", data);
+    for(let i = 0; i < data.data.content.length; i++) {
+      data.data.content[i]._id = `${combinedContent.length + 1}`;
+      if(condition == "IN_PROGRESS") {
+        data.data.content[i].condition = "진행 중";
+      }
+      else if(condition == "COMPLETED") {
+        data.data.content[i].condition = "완료";
+      }
+      else if(condition == "PLANNED") {
+        data.data.content[i].condition = "예정";
+      }
+      combinedContent.push(data.data.content[i]);
+  }
+  }
 
 function initComponents() {
     initRepeater()
@@ -127,10 +136,15 @@ function initComponents() {
   function initRepeater() {
     $w("#repeater3").onItemReady(($item, itemData, index) => {
       //initItemBackground($item, itemData)
+      initItemCondition($item, itemData)
       initItemTitle($item, itemData)
       initItemDate($item, itemData)
       initItemButtion($item, itemData)
     });
+  }
+
+  function initItemCondition($item, itemData) {
+    $item("#text132").text = itemData.condition;
   }
   
   function initItemTitle($item, itemData) {
@@ -143,7 +157,7 @@ function initComponents() {
 
   function initItemButtion($item, itemData) {
     $item("#MoreButton").onClick(() => {
-      wixLocation.to(`/jobs-4?jobPostId=${itemData.jobPostId}`);
+      wixLocation.to(`/jobs?jobPostId=${itemData.jobPostId}`);
     }) 
     $item("#button23").onClick(() => {
       wixLocation.to(`/jobs-2?projectId=${query.projectId}`);

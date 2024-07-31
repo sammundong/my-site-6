@@ -17,6 +17,7 @@ $w.onReady(async function () {
 
     // 모든 데이터를 combinedContent에 합친 후 listRepeater에 설정
     $w("#listRepeater").data = combinedContent;
+    console.log($w("#listRepeater").data)
     initComponents();
 });
 
@@ -27,7 +28,15 @@ async function gDWGM(condition) {
     // Repeater에 데이터 연결
     for(let i = 0; i < data.data.length; i++) {
         data.data[i]._id = `${combinedContent.length + 1}`;
-        data.data[i].condition = condition;
+        if(condition == "IN_PROGRESS") {
+          data.data[i].condition = "진행 중";
+        }
+        else if(condition == "COMPLETED") {
+          data.data[i].condition = "완료";
+        }
+        else if(condition == "PLANNED") {
+          data.data[i].condition = "예정";
+        }
         combinedContent.push(data.data[i]);
     }
 }
@@ -40,7 +49,7 @@ function initComponents() {
   function initRepeater() {
     $w("#listRepeater").onItemReady(($item, itemData, index) => {
       //initItemBackground($item, itemData)
-      //initItemCondition($item, itemData)
+      initItemCondition($item, itemData)
       initItemTitle($item, itemData)
       initItemAddress($item, itemData)
       initItemButtion($item, itemData)
@@ -50,7 +59,6 @@ function initComponents() {
   function initItemCondition($item, itemData) {
     $item("#text126").text = itemData.condition;
   }
-
   
   function initItemTitle($item, itemData) {
     $item("#title").text = itemData.projectName;

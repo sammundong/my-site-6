@@ -14,10 +14,8 @@ import { session } from 'wix-storage-frontend';
 $w.onReady(async function () {
     // Write your JavaScript here
     const query = wixLocation.query;
-    const url = "https://asdfdsas.p-e.kr/api/job-post/worker/"+`${query.jobPostId}`
-    var { data, message } = await getDataWithGetMethod({
-        url: url,
-      });
+    const url = `https://asdfdsas.p-e.kr/api/job-post/worker/${query.jobPostId}`
+    var { data, message } = await getDataWithGetMethod(url);
     
     console.log(data);
     // title
