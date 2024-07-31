@@ -3,22 +3,34 @@ import wixLocation from 'wix-location-frontend';
 // API Reference: https://www.wix.com/velo/reference/api-overview/introduction
 // “Hello, World!” Example: https://learn-code.wix.com/en/article/hello-world
 
+let combinedContent = [];
+
 $w.onReady(async function () {
     // Write your JavaScript here
     // To select an element by ID use: $w('#elementID')
     // Click 'Preview' to run your code
-    $w("#listRepeater").data = []
-    getDataWithGetMethod('https://asdfdsas.p-e.kr/api/project/list?projectStatus=COMPLETED')
-        .then(data => {
-            console.log("가져온 데이터:", data);
-            for(let i=0;i<data.data.length;i++) {
-              data.data[i]._id = `${i+1}`
-            }
-            // Repeater에 데이터 연결
-            $w('#listRepeater').data = data.data;
-        initComponents()
-    });
+    $w("#listRepeater").data = [];
+
+    await gDWGM("IN_PROGRESS");
+    await gDWGM("PLANNED");
+    await gDWGM("COMPLETED");
+
+    // 모든 데이터를 combinedContent에 합친 후 listRepeater에 설정
+    $w("#listRepeater").data = combinedContent;
+    initComponents();
 });
+
+async function gDWGM(condition) {
+    const data = await getDataWithGetMethod(`https://asdfdsas.p-e.kr/api/project/list?projectStatus=${condition}`);
+    console.log("가져온 데이터:", data);
+
+    // Repeater에 데이터 연결
+    for(let i = 0; i < data.data.length; i++) {
+        data.data[i]._id = `${combinedContent.length + 1}`;
+        data.data[i].condition = condition;
+        combinedContent.push(data.data[i]);
+    }
+}
 
 function initComponents() {
     initRepeater()
@@ -28,11 +40,17 @@ function initComponents() {
   function initRepeater() {
     $w("#listRepeater").onItemReady(($item, itemData, index) => {
       //initItemBackground($item, itemData)
+      //initItemCondition($item, itemData)
       initItemTitle($item, itemData)
       initItemAddress($item, itemData)
       initItemButtion($item, itemData)
     });
   }
+
+  function initItemCondition($item, itemData) {
+    $item("#text126").text = itemData.condition;
+  }
+
   
   function initItemTitle($item, itemData) {
     $item("#title").text = itemData.projectName;
