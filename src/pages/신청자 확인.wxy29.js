@@ -4,10 +4,5 @@
 import { fetchUserInfo } from 'backend/dataFetcher';
 
 $w.onReady(async function () {
-    try {
-        const userInfo = await fetchUserInfo("");
-        console.log(userInfo);
-    } catch (error) {
-        console.error("Error fetching user info:", error);
-    }
+    
 });

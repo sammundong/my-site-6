@@ -144,22 +144,22 @@ function initComponents() {
   }
 
   function initItemCondition($item, itemData) {
-    $item("#text132").text = itemData.condition;
+    $item("#text130").text = itemData.condition;
   }
   
   function initItemTitle($item, itemData) {
-    $item("#text128").text = itemData.title;
+    $item("#title").text = itemData.title;
   }
 
   function initItemDate($item, itemData) {
-    $item("#text127").text = itemData.createdDate;
+    $item("#text14").text = itemData.createdDate;
   }
 
   function initItemButtion($item, itemData) {
-    $item("#MoreButton").onClick(() => {
+    $item("#button23").onClick(() => {
       wixLocation.to(`/jobs?jobPostId=${itemData.jobPostId}`);
     }) 
-    $item("#button23").onClick(() => {
+    $item("#button24").onClick(() => {
       wixLocation.to(`/jobs-2?projectId=${query.projectId}`);
     })
   } 
