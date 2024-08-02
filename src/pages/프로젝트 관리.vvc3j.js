@@ -6,9 +6,11 @@ import wixLocation from 'wix-location-frontend';
 let combinedContent = [];
 
 $w.onReady(async function () {
+  $w("#text127").text = "프로젝트가 없습니다.";
     // Write your JavaScript here
     // To select an element by ID use: $w('#elementID')
     // Click 'Preview' to run your code
+  try {
     $w("#listRepeater").data = [];
 
     await gDWGM("IN_PROGRESS");
@@ -18,7 +20,16 @@ $w.onReady(async function () {
     // 모든 데이터를 combinedContent에 합친 후 listRepeater에 설정
     $w("#listRepeater").data = combinedContent;
     console.log($w("#listRepeater").data)
+
+    if($w("#listRepeater").data != []) {
+      $w("#text127").hide();
+    }
+
     initComponents();
+  } catch (error) {
+      console.error('Error:', error);
+      showErrorToUser(error.message);
+  }
 });
 
 async function gDWGM(condition) {
@@ -39,6 +50,11 @@ async function gDWGM(condition) {
         }
         combinedContent.push(data.data[i]);
     }
+}
+
+function showErrorToUser(errorMessage) {
+  $w("#text127").text = errorMessage;
+  $w("#text127").show();
 }
 
 function initComponents() {

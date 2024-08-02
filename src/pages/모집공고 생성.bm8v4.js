@@ -35,6 +35,7 @@ import wixLocation from 'wix-location-frontend';
 
 // 페이지가 로드될 때 실행됩니다.
 $w.onReady(function () {
+    $w("#text13").hide();
     $w("#button8").onClick(formSubmit);
 });
 
@@ -52,85 +53,95 @@ async function formSubmit() {
     const startTime = $w('#timePicker1').value;
     const endTime = $w('#timePicker2').value;
     const address = $w('#addressInput1').value;
-    const pickup = ($w('#radioGroup1').value.toLowerCase() === 'false') ? false : true;
+    const pickup = ($w('#radioGroup1').value.toLowerCase() === 'False') ? true : false;
     const pickupAddressList = []
+    console.log(pickup)
+    console.log($w('#radioGroup1').value)
     if (pickup == true) {
         pickupAddressList.push($w('#addressInput2').value.formatted)
     }
-    const meal = ($w('#radioGroup2').value.toLowerCase() === 'false') ? false : true;
-    const park = ($w('#radioGroup3').value.toLowerCase() === 'false') ? false : $w('#radioGroup3').value;
+    const meal = ($w('#radioGroup2').value.toLowerCase() === 'false') ? true : false;
+    const park = $w('#radioGroup3').value;
     const parkDetail = $w('#input4').value;
     const preparation = $w('#input5').value;
     const manager = $w('#input6').value;
     const phone = $w('#input7').value;
     const image = $w("#uploadButton1").value
     
-    let imageList = null;
-    imageList = imageList ? imageList : [];
-
-
-
-    const latitude = address.location.latitude;
-    const longitude = address.location.longitude;
- 
-    console.log(dateList)
-    // 새로운 데이터 객체 생성
-    const request = {
-        "title" : title,
-        "tech" : tech,
-        "startTime" : startTime,
-        "endTime" : endTime,
-        "recruitNum" : recruitNum,
-        "wage" : money,
-        "preparation" : preparation,
-        "parkDetail" : parkDetail,
-        "meal" : meal,
-        "pickup" : pickup,
-        "park" : park,
-        "address" : address.formatted,
-        "latitude" : latitude,
-        "longitude" : longitude,
-        "dateList" : dateList,
-        "pickupList" : pickupAddressList,
-        "managerName" : manager,
-        "phone" : phone,
-        //"projectId" : 1
-        "projectId" : parseInt(query.projectId, 10)
-    };
-
-    const data = {   
-        request : request
+    if(title == "" || tech == "" || recruitNum == null || money == null || $w('#input8').value == "" || startTime == "" || endTime == "" || address == null || manager == "" || phone == "" || preparation == "") {
+        if((pickup == true && pickupAddressList == []) || (park != "NONE" && parkDetail == ""))
+        $w("#text13").text = "빈칸을 모두 채워주세요";
+        $w("#text13").show();
     }
 
-    const formData = new FormData();
-    formData.append('request', new Blob([JSON.stringify(data.request)], {
-        type: "application/json",
-      }));
-    formData.append('imageList', JSON.stringify(imageList));
+    else {
+        let imageList = null;
+        imageList = imageList ? imageList : [];
 
-    console.log(request)
-    const options = {
-        method: 'POST',
-        headers: {
-            //'Content-Type': 'multipart/form-data',
-            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI'
-        },
-        body: formData
-    };
 
-    // 외부 API에 데이터 삽입 요청
-    fetch(`https://asdfdsas.p-e.kr/api/job-post/company`, options)
-        .then(response => response.json())
-        .then(data => {
-            // 삽입 성공 시 처리
-            // const fullData = { ...project, ...data };
-            console.log("데이터 삽입 성공:", data);
-            //$w('#text142').text = "회원 정보가 성공적으로 등록되었습니다.";
-        })
-        .catch((error) => {
-            // 삽입 실패 시 처리
-            console.error("데이터 삽입 실패:", error);
-            //$w('#text142').text = "회원 정보 등록에 실패했습니다.";
+
+        const latitude = address.location.latitude;
+        const longitude = address.location.longitude;
+    
+        console.log(dateList)
+        // 새로운 데이터 객체 생성
+        const request = {
+            "title" : title,
+            "tech" : tech,
+            "startTime" : startTime,
+            "endTime" : endTime,
+            "recruitNum" : recruitNum,
+            "wage" : money,
+            "preparation" : preparation,
+            "parkDetail" : parkDetail,
+            "meal" : meal,
+            "pickup" : pickup,
+            "park" : park,
+            "address" : address.formatted,
+            "latitude" : latitude,
+            "longitude" : longitude,
+            "dateList" : dateList,
+            "pickupList" : pickupAddressList,
+            "managerName" : manager,
+            "phone" : phone,
+            "projectId" : parseInt(query.projectId, 10)
+        };
+
+        const data = {   
+            request : request
+        }
+
+        const formData = new FormData();
+        formData.append('request', new Blob([JSON.stringify(data.request)], {
+            type: "application/json",
+        }));
+        formData.append('imageList', JSON.stringify(imageList));
+
+        console.log(request)
+        const options = {
+            method: 'POST',
+            headers: {
+                //'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI'
+            },
+            body: formData
+        };
+
+        // 외부 API에 데이터 삽입 요청
+        fetch(`https://asdfdsas.p-e.kr/api/job-post/company`, options)
+            .then(response => response.json())
+            .then(data => {
+                // 삽입 성공 시 처리
+                // const fullData = { ...project, ...data };
+                console.log("데이터 삽입 성공:", data);
+                //$w('#text142').text = "회원 정보가 성공적으로 등록되었습니다.";
+                wixLocation.to(`/general-4?projectId=${query.projectId}`);
+            })
+            .catch((error) => {
+                // 삽입 실패 시 처리
+                console.error("데이터 삽입 실패:", error);
+                //$w('#text142').text = "회원 정보 등록에 실패했습니다.";
         });
+    }   
 }
 

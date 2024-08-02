@@ -41,6 +41,7 @@ import wixLocation from 'wix-location-frontend';
 
 // 페이지가 로드될 때 실행됩니다.
 $w.onReady(function () {
+    $w("#text13").hide();
     $w("#button8").onClick(formSubmit);
 });
 
@@ -53,44 +54,51 @@ async function formSubmit(event) {
     const startDate = $w('#input8').value
     const endDate = $w('#input9').value
     const address = $w('#addressInput1').value;
+
+    if(projectName == "" || startDate == "" || endDate == "" || address == null) {
+        $w("#text13").text = "빈칸을 모두 채워주세요";
+        $w("#text13").show();
+    }
+
+    else {
+        const latitude = address.location.latitude;
+        const longitude = address.location.longitude;
     
-    const latitude = address.location.latitude;
-    const longitude = address.location.longitude;
- 
 
-    // 새로운 데이터 객체 생성
-    const project = {
-        "projectName" : projectName,
-        "startDate" : startDate,
-        "endDate" : endDate,
-        "address" : address.formatted,
-        "latitude" : latitude,
-        "longitude" : longitude
-    };
-    console.log(project)
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI'
-        },
-        body: JSON.stringify(project)
-    };
+        // 새로운 데이터 객체 생성
+        const project = {
+            "projectName" : projectName,
+            "startDate" : startDate,
+            "endDate" : endDate,
+            "address" : address.formatted,
+            "latitude" : latitude,
+            "longitude" : longitude
+        };
+        console.log(project)
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI'
+            },
+            body: JSON.stringify(project)
+        };
 
-    // 외부 API에 데이터 삽입 요청
-    fetch('https://asdfdsas.p-e.kr/api/project', options)
-        .then(response => response.json())
-        .then(data => {
-            // 삽입 성공 시 처리
-            // const fullData = { ...project, ...data };
-            console.log("데이터 삽입 성공:", data);
-            //$w('#text142').text = "회원 정보가 성공적으로 등록되었습니다.";
-            wixLocation.to(`/jobs-4`);
-        })
-        .catch((error) => {
-            // 삽입 실패 시 처리
-            console.error("데이터 삽입 실패:", error);
-            //$w('#text142').text = "회원 정보 등록에 실패했습니다.";
-        });
-}
+        // 외부 API에 데이터 삽입 요청
+        fetch('https://asdfdsas.p-e.kr/api/project', options)
+            .then(response => response.json())
+            .then(data => {
+                // 삽입 성공 시 처리
+                // const fullData = { ...project, ...data };
+                console.log("데이터 삽입 성공:", data);
+                //$w('#text142').text = "회원 정보가 성공적으로 등록되었습니다.";
+                wixLocation.to(`/jobs-4`);
+            })
+            .catch((error) => {
+                // 삽입 실패 시 처리
+                console.error("데이터 삽입 실패:", error);
+                //$w('#text142').text = "회원 정보 등록에 실패했습니다.";
+            });
+        }
+    }
 

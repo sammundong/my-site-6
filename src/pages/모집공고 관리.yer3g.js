@@ -7,10 +7,11 @@ const query = wixLocation.query;
 let combinedContent = [];
 
 $w.onReady(async function () {
+  $w("#text13").text = "공고가 없습니다.";
     // Write your JavaScript here
     // To select an element by ID use: $w('#elementID')
     // Click 'Preview' to run your code
-
+  try {
     $w('#section1').collapse();
     $w('#section2').collapse();
     $w('#button12').collapse();
@@ -103,11 +104,20 @@ $w.onReady(async function () {
 
     $w("#repeater3").data = combinedContent;
     console.log($w("#repeater3").data)
+
+    if($w("#repeater3").data.length != 0) {
+      $w("#text13").hide();
+    }
+
     initComponents();
 
     $w("#button22").onClick(() => {
       wixLocation.to(`/jobs-2?projectId=${query.projectId}`);
     })
+  } catch (error) {
+    console.error('Error:', error);
+    showErrorToUser(error.message);
+  }
 });
 
 async function gDWGM(query, condition) {
@@ -125,8 +135,13 @@ async function gDWGM(query, condition) {
         data.data.content[i].condition = "예정";
       }
       combinedContent.push(data.data.content[i]);
+    }
   }
+function showErrorToUser(errorMessage) {
+    $w("#text13").text = errorMessage;
+    $w("#text13").show();
   }
+  
 
 function initComponents() {
     initRepeater()
@@ -160,7 +175,7 @@ function initComponents() {
       wixLocation.to(`/jobs?jobPostId=${itemData.jobPostId}`);
     }) 
     $item("#button24").onClick(() => {
-      wixLocation.to(`/jobs-2?projectId=${query.projectId}`);
+      wixLocation.to(`/blank-4?jobPostId=${itemData.jobPostId}&projectId=${query.projectId}`);
     })
   } 
  
