@@ -45,22 +45,36 @@ $w.onReady(function () {
     $w("#button8").onClick(formSubmit);
 });
 
+function formatDate(date) {
+    let year = date.getFullYear();
+    let month = String(date.getMonth() + 1).padStart(2, '0');
+    let day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
 // 폼 제출 함수
 async function formSubmit(event) {
     //event.preventDefault(); // 기본 폼 제출 동작 방지
 
     // 입력 필드 값 가져오기
     const projectName = $w('#input1').value;
-    const startDate = $w('#input8').value
-    const endDate = $w('#input9').value
+    let startDate = $w("#datePicker1").value;
+    let endDate = $w("#datePicker2").value;
     const address = $w('#addressInput1').value;
 
-    if(projectName == "" || startDate == "" || endDate == "" || address == null) {
+    if(projectName == "" || startDate == null || endDate == null || address == null) {
         $w("#text13").text = "빈칸을 모두 채워주세요";
         $w("#text13").show();
     }
 
+    else if (startDate > endDate) {
+        $w("#text13").text = "시작날짜가 끝나는 날짜보다 늦습니다.";
+        $w("#text13").show();
+    }
+
     else {
+        let startDate2 = formatDate(startDate);
+        let endDate2 = formatDate(endDate);
         const latitude = address.location.latitude;
         const longitude = address.location.longitude;
     
@@ -68,8 +82,8 @@ async function formSubmit(event) {
         // 새로운 데이터 객체 생성
         const project = {
             "projectName" : projectName,
-            "startDate" : startDate,
-            "endDate" : endDate,
+            "startDate" : startDate2,
+            "endDate" : endDate2,
             "address" : address.formatted,
             "latitude" : latitude,
             "longitude" : longitude
@@ -91,6 +105,8 @@ async function formSubmit(event) {
                 // 삽입 성공 시 처리
                 // const fullData = { ...project, ...data };
                 console.log("데이터 삽입 성공:", data);
+                $w("#text13").text = "프로젝트 생성이 완료되었습니다.";
+                $w("#text13").show();
                 //$w('#text142').text = "회원 정보가 성공적으로 등록되었습니다.";
                 wixLocation.to(`/jobs-4`);
             })

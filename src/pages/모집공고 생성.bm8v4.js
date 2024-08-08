@@ -49,7 +49,12 @@ async function formSubmit() {
     const recruitNum = parseInt($w('#input2').value, 10);
     const money = parseInt($w('#input3').value, 10);
     const dateList = []
-    dateList.push($w('#input8').value);
+    let date = $w("#datePicker1").value;
+    let year = date.getFullYear();
+    let month = String(date.getMonth() + 1).padStart(2, '0');
+    let day = String(date.getDate()).padStart(2, '0');
+    const date_st = `${year}-${month}-${day}`;
+    dateList.push(date_st);
     const startTime = $w('#timePicker1').value;
     const endTime = $w('#timePicker2').value;
     const address = $w('#addressInput1').value;
@@ -68,7 +73,7 @@ async function formSubmit() {
     const phone = $w('#input7').value;
     const image = $w("#uploadButton1").value
     
-    if(title == "" || tech == "" || recruitNum == null || money == null || $w('#input8').value == "" || startTime == "" || endTime == "" || address == null || manager == "" || phone == "" || preparation == "") {
+    if(title == "" || tech == "" || recruitNum == null || money == null || date == null || startTime == "" || endTime == "" || address == null || manager == "" || phone == "" || preparation == "") {
         if((pickup == true && pickupAddressList == []) || (park != "NONE" && parkDetail == ""))
         $w("#text13").text = "빈칸을 모두 채워주세요";
         $w("#text13").show();
@@ -77,8 +82,6 @@ async function formSubmit() {
     else {
         let imageList = null;
         imageList = imageList ? imageList : [];
-
-
 
         const latitude = address.location.latitude;
         const longitude = address.location.longitude;
