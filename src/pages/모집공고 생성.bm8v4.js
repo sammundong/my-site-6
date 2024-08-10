@@ -118,7 +118,12 @@ async function formSubmit() {
         formData.append('request', new Blob([JSON.stringify(data.request)], {
             type: "application/json",
         }));
-        formData.append('imageList', JSON.stringify(imageList));
+        if(image == null) {
+            formData.append('imageList', JSON.stringify(imageList));
+        }
+        else {
+            formData.append('imageList', JSON.stringify(image));
+        }
 
         console.log(request)
         const options = {
@@ -137,6 +142,8 @@ async function formSubmit() {
                 // 삽입 성공 시 처리
                 // const fullData = { ...project, ...data };
                 console.log("데이터 삽입 성공:", data);
+                $w("#text13").text = "프로젝트 생성이 완료되었습니다.";
+                $w("#text13").show();
                 //$w('#text142').text = "회원 정보가 성공적으로 등록되었습니다.";
                 wixLocation.to(`/general-4?projectId=${query.projectId}`);
             })
