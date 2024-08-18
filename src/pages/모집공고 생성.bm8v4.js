@@ -71,7 +71,9 @@ async function formSubmit() {
     const preparation = $w('#input5').value;
     const manager = $w('#input6').value;
     const phone = $w('#input7').value;
-    const image = $w("#uploadButton1").value
+    const images = $w("#uploadButton1").value
+    let image = []
+    // let type = []
     
     if(title == "" || tech == "" || recruitNum == null || money == null || date == null || startTime == "" || endTime == "" || address == null || manager == "" || phone == "" || preparation == "") {
         if((pickup == true && pickupAddressList == []) || (park != "NONE" && parkDetail == ""))
@@ -118,11 +120,19 @@ async function formSubmit() {
         formData.append('request', new Blob([JSON.stringify(data.request)], {
             type: "application/json",
         }));
-        if(image == null) {
+        if(images == null) {
             formData.append('imageList', JSON.stringify(imageList));
+            console.log(imageList)
         }
         else {
+            image.push(images[0].name)
+            let img_type = images[0].name.split('.');
+            // type.push(`image/${img_type[1]}`);
+            let type = `image/${img_type[1]}`;
+            console.log(`image/${img_type[1]}`);
             formData.append('imageList', JSON.stringify(image));
+            formData.append('type', JSON.stringify(type));
+            console.log(image)
         }
 
         console.log(request)
@@ -141,9 +151,9 @@ async function formSubmit() {
             .then(data => {
                 // 삽입 성공 시 처리
                 // const fullData = { ...project, ...data };
-                console.log("데이터 삽입 성공:", data);
                 $w("#text13").text = "프로젝트 생성이 완료되었습니다.";
                 $w("#text13").show();
+                console.log("데이터 삽입 성공:", data);
                 //$w('#text142').text = "회원 정보가 성공적으로 등록되었습니다.";
                 wixLocation.to(`/general-4?projectId=${query.projectId}`);
             })
