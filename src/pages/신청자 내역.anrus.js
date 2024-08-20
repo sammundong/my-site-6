@@ -8,20 +8,32 @@ import { getApiKey, kakaoApiKey } from "backend/apikey.jsw";
 import { session } from 'wix-storage-frontend';
 import { query } from 'wix-data';
 
+
 let combinedContent = [];
 let applyIdList = [];
 let memberIdList = [];
 let jpi = 0;
 let pji = 0;
 
+var loginKey = session.getItem("loginKey");
+
 $w.onReady(async function () {
+
+    if(loginKey) {
+      $w("#button21").label = "로그아웃"
+      $w("#button21").onClick(() => {
+        session.removeItem("loginKey");
+        $w("#button21").label = "로그인"
+        wixLocation.to(`/`);
+      })
+    }
     
     const query = wixLocation.query;
     jpi = query.jobPostId
     pji = query.projectId
     console.log(pji)
     const url = `https://asdfdsas.p-e.kr/api/job-post/worker/${query.jobPostId}`
-    var { data, message } = await getDataWithGetMethod(url);
+    var { data, message } = await getDataWithGetMethod(url, loginKey);
     console.log(data);
 
     let workDateList = []

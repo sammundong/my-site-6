@@ -31,10 +31,22 @@
 
 import { query } from 'wix-data';
 import wixLocation from 'wix-location-frontend';
+import { session } from 'wix-storage-frontend';
+
 //import { fetch } from 'wix-fetch';
+
+var loginKey = session.getItem("loginKey");
 
 // 페이지가 로드될 때 실행됩니다.
 $w.onReady(function () {
+    if(loginKey) {
+      $w("#button21").label = "로그아웃"
+      $w("#button21").onClick(() => {
+        session.removeItem("loginKey");
+        $w("#button21").label = "로그인"
+        wixLocation.to(`/`);
+      })
+    }
     $w("#text13").hide();
     $w("#button8").onClick(formSubmit);
 });
@@ -58,14 +70,14 @@ async function formSubmit() {
     const startTime = $w('#timePicker1').value;
     const endTime = $w('#timePicker2').value;
     const address = $w('#addressInput1').value;
-    const pickup = ($w('#radioGroup1').value.toLowerCase() === 'False') ? true : false;
+    const pickup = ($w('#radioGroup1').value === 'False') ? false : true;
     const pickupAddressList = []
     console.log(pickup)
     console.log($w('#radioGroup1').value)
     if (pickup == true) {
         pickupAddressList.push($w('#addressInput2').value.formatted)
     }
-    const meal = ($w('#radioGroup2').value.toLowerCase() === 'false') ? true : false;
+    const meal = ($w('#radioGroup2').value === 'false') ? false : true;
     const park = $w('#radioGroup3').value;
     const parkDetail = $w('#input4').value;
     const preparation = $w('#input5').value;
@@ -120,19 +132,16 @@ async function formSubmit() {
         formData.append('request', new Blob([JSON.stringify(data.request)], {
             type: "application/json",
         }));
-        if(images == null) {
-            formData.append('imageList', JSON.stringify(imageList));
-            console.log(imageList)
-        }
-        else {
-            image.push(images[0].name)
-            let img_type = images[0].name.split('.');
-            // type.push(`image/${img_type[1]}`);
-            let type = `image/${img_type[1]}`;
-            console.log(`image/${img_type[1]}`);
-            formData.append('imageList', JSON.stringify(image));
-            formData.append('type', JSON.stringify(type));
-            console.log(image)
+
+        if (images == null) {
+            // 이미지 리스트가 null일 경우 빈 배열을 전송
+            console.log('No images to upload');
+        } else {
+            images.forEach((image, index) => {
+                formData.append('imageList', image); // 파일 자체를 추가
+            });
+            
+            console.log('Images appended to FormData');
         }
 
         console.log(request)
@@ -140,7 +149,7 @@ async function formSubmit() {
             method: 'POST',
             headers: {
                 //'Content-Type': 'multipart/form-data',
-                'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI'
+                'Authorization': `Bearer ${loginKey}`
             },
             body: formData
         };

@@ -1,15 +1,33 @@
 // Velo API 레퍼런스: https://www.wix.com/velo/reference/api-overview/introduction
+import { getDataWithGetMethod } from "backend/dataFetcher";
+import { session } from "wix-storage-frontend";
+import wixLocation from 'wix-location-frontend';
 
 $w.onReady(function () {
 
-	// Velo 프레임워크 API를 사용하여 자바스크립트 코드를 입력하세요.
-
-	// Hello world 출력:
-	// console.log("Hello wossrld!");
-
-	// 페이지 요소에 함수를 요청하세요. 예:
-	// $w("#button1").label = "Click me!";
-
-	// "실행"을 클릭하거나 사이트를 미리보기하여 코드를 실행하세요.
-
+	var loginKey = session.getItem("loginKey");
+    if(loginKey) {
+      $w("#button10").label = "로그아웃"
+      $w("#button21").label = "로그아웃"
+      $w("#button10").onClick(() => {
+        session.removeItem("loginKey");
+        $w("#button10").label = "로그인"
+        $w("#button21").label = "로그인"
+        wixLocation.to(`/로그인`);
+      })
+      $w("#button21").onClick(() => {
+        session.removeItem("loginKey");
+        $w("#button10").label = "로그인"
+        $w("#button21").label = "로그인"
+        wixLocation.to(`/로그인`);
+      })
+    }
+    else {
+      $w("#button10").onClick(() => {
+        wixLocation.to(`/로그인`);
+      })
+      $w("#button21").onClick(() => {
+        wixLocation.to(`/로그인`);
+      })
+    }
 });

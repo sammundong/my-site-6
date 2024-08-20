@@ -1,10 +1,17 @@
 import { getDataWithGetMethod } from "backend/dataFetcher";
 import wixLocation from 'wix-location-frontend';
+import { session } from 'wix-storage-frontend';
+
 // API Reference: https://www.wix.com/velo/reference/api-overview/introduction
 // “Hello, World!” Example: https://learn-code.wix.com/en/article/hello-world
 const query = wixLocation.query;
 
 let combinedContent = [];
+
+let currentPage = 0;
+const itemsPerPage = 10;
+
+var loginKey = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI`//session.getItem("loginKey");
 
 $w.onReady(async function () {
   $w("#text13").text = "공고가 없습니다.";
@@ -97,85 +104,131 @@ $w.onReady(async function () {
 
         console.log(clickedElement.id,"onclick");
     }) */
+    if(loginKey) {
+      $w("#button21").label = "로그아웃"
+      $w("#button21").onClick(() => {
+        session.removeItem("loginKey");
+        $w("#button21").label = "로그인"
+        wixLocation.to(`/`);
+      })
+    }
     $w("#repeater3").data = []
-    await gDWGM(query, "IN_PROGRESS");
-    await gDWGM(query, "PLANNED");
-    await gDWGM(query, "COMPLETED");
+    
+    await gDWGM_m(query, "IN_PROGRESS");
+    await gDWGM_m(query, "PLANNED");
+    await gDWGM_m(query, "COMPLETED");
 
-    $w("#repeater3").data = combinedContent;
-    console.log($w("#repeater3").data)
+    updateRepeater();
 
-    if($w("#repeater3").data.length != 0) {
+    if ($w("#repeater3").data.length !== 0) {
       $w("#text13").hide();
+    }
+    else {
+      $w("#currentPageText").hide();
+      $w("#prevButton").hide();
+      $w("#nextButton").hide();
     }
 
     initComponents();
 
     $w("#button22").onClick(() => {
       wixLocation.to(`/jobs-2?projectId=${query.projectId}`);
-    })
+    });
+
+    $w("#nextButton").onClick(() => {
+      if ((currentPage + 1) * itemsPerPage < combinedContent.length) {
+        currentPage++;
+        updateRepeater();
+      }
+    });
+
+    $w("#prevButton").onClick(() => {
+      if (currentPage > 0) {
+        currentPage--;
+        updateRepeater();
+      }
+    });
   } catch (error) {
     console.error('Error:', error);
     showErrorToUser(error.message);
   }
 });
 
-async function gDWGM(query, condition) {
-  const data = await getDataWithGetMethod(`https://asdfdsas.p-e.kr/api/job-post/company/list/${query.projectId}?jobPostStatus=${condition}&page=0&size=10`);
-    console.log("가져온 데이터:", data);
-    for(let i = 0; i < data.data.content.length; i++) {
-      data.data.content[i]._id = `${combinedContent.length + 1}`;
-      if(condition == "IN_PROGRESS") {
-        data.data.content[i].condition = "진행 중";
-      }
-      else if(condition == "COMPLETED") {
-        data.data.content[i].condition = "완료";
-      }
-      else if(condition == "PLANNED") {
-        data.data.content[i].condition = "예정";
-      }
-      combinedContent.push(data.data.content[i]);
+async function gDWGM_m(query, condition) {
+  const data = await getDataWithGetMethod(`https://asdfdsas.p-e.kr/api/job-post/company/list/${query.projectId}?jobPostStatus=${condition}&page=0&size=100`, loginKey);
+  console.log("가져온 데이터:", data);
+  for (let i = 0; i < data.data.content.length; i++) {
+    data.data.content[i]._id = `${combinedContent.length + 1}`;
+    if (condition === "IN_PROGRESS") {
+      data.data.content[i].condition = "진행 중";
+    } else if (condition === "COMPLETED") {
+      data.data.content[i].condition = "완료";
+    } else if (condition === "PLANNED") {
+      data.data.content[i].condition = "예정";
     }
+    combinedContent.push(data.data.content[i]);
   }
+}
+
+function updateRepeater() {
+  const start = currentPage * itemsPerPage;
+  const end = start + itemsPerPage;
+  $w("#repeater3").data = combinedContent.slice(start, end);
+
+  // 페이지 번호 업데이트
+  $w("#currentPageText").text = `${currentPage + 1}`;
+
+  // 버튼 활성화/비활성화 상태 설정
+  $w("#prevButton").enable();
+  $w("#nextButton").enable();
+
+  if (currentPage === 0) {
+    $w("#prevButton").disable();
+  }
+  if ((currentPage + 1) * itemsPerPage >= combinedContent.length) {
+    $w("#nextButton").disable();
+  }
+}
+
 function showErrorToUser(errorMessage) {
-    $w("#text13").text = errorMessage;
-    $w("#text13").show();
-  }
-  
+  $w("#text13").text = errorMessage;
+  $w("#text13").show();
+  $w("#currentPageText").hide();
+  $w("#prevButton").hide();
+  $w("#nextButton").hide();
+}
 
 function initComponents() {
-    initRepeater()
-  }
-  
-  
-  function initRepeater() {
-    $w("#repeater3").onItemReady(($item, itemData, index) => {
-      //initItemBackground($item, itemData)
-      initItemCondition($item, itemData)
-      initItemTitle($item, itemData)
-      initItemDate($item, itemData)
-      initItemButtion($item, itemData)
-    });
-  }
+  initRepeater();
+}
 
-  function initItemCondition($item, itemData) {
-    $item("#text130").text = itemData.condition;
-  }
-  
-  function initItemTitle($item, itemData) {
-    $item("#title").text = itemData.title;
-  }
+function initRepeater() {
+  $w("#repeater3").onItemReady(($item, itemData, index) => {
+    initItemCondition($item, itemData);
+    initItemTitle($item, itemData);
+    initItemDate($item, itemData);
+    initItemButtion($item, itemData);
+  });
+}
 
-  function initItemDate($item, itemData) {
-    $item("#text14").text = itemData.createdDate;
-  }
+function initItemCondition($item, itemData) {
+  $item("#text130").text = itemData.condition;
+}
 
-  function initItemButtion($item, itemData) {
-    $item("#button23").onClick(() => {
-      wixLocation.to(`/jobs?jobPostId=${itemData.jobPostId}`);
-    }) 
-    $item("#button24").onClick(() => {
-      wixLocation.to(`/blank-4?jobPostId=${itemData.jobPostId}&projectId=${query.projectId}`);
-    })
-  } 
+function initItemTitle($item, itemData) {
+  $item("#title").text = itemData.title;
+}
+
+function initItemDate($item, itemData) {
+  $item("#text14").text = itemData.createdDate;
+}
+
+function initItemButtion($item, itemData) {
+  $item("#button23").onClick(() => {
+    wixLocation.to(`/jobs?jobPostId=${itemData.jobPostId}`);
+  });
+  $item("#button24").onClick(() => {
+    wixLocation.to(`/blank-4?jobPostId=${itemData.jobPostId}&projectId=${query.projectId}`);
+  });
+}
  

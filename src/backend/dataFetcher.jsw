@@ -1,13 +1,13 @@
 import { fetch } from 'wix-fetch';
 
 // 외부 API에서 데이터를 가져오는 함수
-export async function getDataWithGetMethod(url) {
+export async function getDataWithGetMethod(url, key) {
         //const url = 'https://asdfdsas.p-e.kr/api/project/list?projectStatus=COMPLETED'; // 올바른 엔드포인트 확인
         const options = {
             method: 'GET', // GET 메서드 사용
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI' // 필요한 경우 인증 토큰 추가
+                'Authorization': `Bearer ${key}` // 필요한 경우 인증 토큰 추가
             }
         };
         return await fetch(url, options)

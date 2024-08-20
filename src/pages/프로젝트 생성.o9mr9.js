@@ -38,9 +38,21 @@
 // }
 
 import wixLocation from 'wix-location-frontend';
+import { session } from 'wix-storage-frontend';
+
+var loginKey = session.getItem("loginKey");
 
 // 페이지가 로드될 때 실행됩니다.
 $w.onReady(function () {
+    if(loginKey) {
+      $w("#button21").label = "로그아웃"
+      $w("#button21").onClick(() => {
+        session.removeItem("loginKey");
+        $w("#button21").label = "로그인"
+        wixLocation.to(`/`);
+      })
+    }
+    console.log(loginKey)
     $w("#text13").hide();
     $w("#button8").onClick(formSubmit);
 });
@@ -93,7 +105,7 @@ async function formSubmit(event) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI'
+                'Authorization': `Bearer ${loginKey}`
             },
             body: JSON.stringify(project)
         };
