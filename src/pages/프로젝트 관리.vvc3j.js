@@ -6,7 +6,7 @@ import { session } from 'wix-storage-frontend';
 // “Hello, World!” Example: https://learn-code.wix.com/en/article/hello-world
 
 let combinedContent = [];
-var loginKey = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI`//session.getItem("loginKey");
+var loginKey = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI` // session.getItem("loginKey");
 
 $w.onReady(async function () {
   if(loginKey) {
@@ -106,9 +106,9 @@ function initComponents() {
   }
 
   function initItemButtion($item, itemData) {
-    /* $item("#MoreButton").onClick(() => {
-      wixLocation.to(`/jobs-4?projectId=${itemData.projectId}`);
-    }) */
+    $item("#button22").onClick(() => {
+      wixLocation.to(`/general-clean?projectId=${itemData.projectId}`);
+    }) 
     $item("#button9").onClick(() => {
       wixLocation.to(`/general-4?projectId=${itemData.projectId}`);
     })

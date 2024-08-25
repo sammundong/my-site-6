@@ -40,7 +40,7 @@
 import wixLocation from 'wix-location-frontend';
 import { session } from 'wix-storage-frontend';
 
-var loginKey = session.getItem("loginKey");
+var loginKey = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI`//session.getItem("loginKey");
 
 // 페이지가 로드될 때 실행됩니다.
 $w.onReady(function () {
@@ -71,8 +71,12 @@ async function formSubmit(event) {
     // 입력 필드 값 가져오기
     const projectName = $w('#input1').value;
     let startDate = $w("#datePicker1").value;
+    let startDate2 = formatDate(startDate);
     let endDate = $w("#datePicker2").value;
     const address = $w('#addressInput1').value;
+    let today = new Date();
+        today.setHours(0, 0, 0, 0); 
+        let formattedToday = formatDate(today);
 
     if(projectName == "" || startDate == null || endDate == null || address == null) {
         $w("#text13").text = "빈칸을 모두 채워주세요";
@@ -81,6 +85,11 @@ async function formSubmit(event) {
 
     else if (startDate > endDate) {
         $w("#text13").text = "시작날짜가 끝나는 날짜보다 늦습니다.";
+        $w("#text13").show();
+    }
+
+    else if (startDate2 == formattedToday) {
+        $w("#text13").text = "시작날짜가 오늘입니다.";
         $w("#text13").show();
     }
 
