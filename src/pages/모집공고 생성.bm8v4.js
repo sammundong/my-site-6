@@ -39,17 +39,27 @@ var loginKey = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzA
 
 // 페이지가 로드될 때 실행됩니다.
 $w.onReady(function () {
-    if(loginKey) {
-      $w("#button21").label = "로그아웃"
-      $w("#button21").onClick(() => {
-        session.removeItem("loginKey");
-        $w("#button21").label = "로그인"
-        wixLocation.to(`/`);
-      })
+    try {
+        if(loginKey) {
+        $w("#button21").label = "로그아웃"
+        $w("#button21").onClick(() => {
+            session.removeItem("loginKey");
+            $w("#button21").label = "로그인"
+            wixLocation.to(`/`);
+        })
+        }
+        $w("#text13").hide();
+        $w("#button8").onClick(formSubmit);
+    } catch (error) {
+        console.error('Error:', error);
+        showErrorToUser(error.message);
     }
-    $w("#text13").hide();
-    $w("#button8").onClick(formSubmit);
 });
+
+function showErrorToUser(errorMessage) {
+    $w("#text13").text = errorMessage;
+    $w("#text13").show();
+  }
 
 // 폼 제출 함수
 async function formSubmit() {
@@ -81,17 +91,27 @@ async function formSubmit() {
     const park = $w('#radioGroup3').value;
     const parkDetail = $w('#input4').value;
     const preparation = $w('#input5').value;
-    const manager = $w('#input6').value;
-    const phone = $w('#input7').value;
+    const manager = "";
+    const phone = "";
     const images = $w("#uploadButton1").value
+    const description = $w('#input6').value;
     let image = []
     // let type = []
     
-    if(title == "" || tech == "" || recruitNum == null || money == null || date == null || startTime == "" || endTime == "" || address == null || manager == "" || phone == "" || preparation == "") {
-        if((pickup == true && pickupAddressList == []) || (park != "NONE" && parkDetail == ""))
+    if(title == "" || tech == "" || recruitNum == null || money == null || date == null || startTime == "" || endTime == "" || address == null || preparation == "") {
         $w("#text13").text = "빈칸을 모두 채워주세요";
         $w("#text13").show();
     }
+
+    else if(pickup == true && pickupAddressList == []) {
+            $w("#text13").text = "픽업 주소 칸을 채워주세요";
+            $w("#text13").show();
+    }
+
+    else if(park != "NONE" && parkDetail == "") {
+        $w("#text13").text = "주차 정보 칸을 채워주세요";
+        $w("#text13").show();
+}
 
     else {
         let imageList = null;
@@ -121,6 +141,7 @@ async function formSubmit() {
             "pickupList" : pickupAddressList,
             "managerName" : manager,
             "phone" : phone,
+            "description" : description,
             "projectId" : parseInt(query.projectId, 10)
         };
 
@@ -164,7 +185,17 @@ async function formSubmit() {
                 $w("#text13").show();
                 console.log("데이터 삽입 성공:", data);
                 //$w('#text142').text = "회원 정보가 성공적으로 등록되었습니다.";
-                wixLocation.to(`/general-4?projectId=${query.projectId}`);
+                if(data.message == "커스텀 예외 반환") {
+                    if(data.data.errorMessage == "모집 공고 날짜가 프로젝트 기간에 포함되지 않습니다") {
+                        $w("#text13").text = "모집 공고 날짜가 프로젝트 기간에 포함되지 않습니다";
+                    }
+                    else if(data.data.errorMessage == "프로젝트 정보가 없습니다.") {
+                        $w("#text13").text = "모집공고를 참조하는 프로젝트가 없습니다. 프로젝트 관리로 들어가서 다시 시도해주십시오.";
+                    }
+                }
+                else {
+                    wixLocation.to(`/general-4?projectId=${query.projectId}`);
+                }
             })
             .catch((error) => {
                 // 삽입 실패 시 처리

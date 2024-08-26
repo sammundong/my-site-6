@@ -11,7 +11,7 @@ import { getDataWithGetMethod } from "backend/dataFetcher";
 import { getApiKey, kakaoApiKey } from "backend/apikey.jsw";
 import { session } from 'wix-storage-frontend';
 
-var loginKey = session.getItem("loginKey");
+var loginKey = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI`//session.getItem("loginKey");
 
 $w.onReady(async function () {
     // Write your JavaScript here
@@ -39,14 +39,28 @@ $w.onReady(async function () {
       var pickupAddress = data.pickupAddressList.join('\n\n');
       $w("#text157").text = pickupAddress;
     }
+    else {
+      $w("#text157").text = "제공하지 않음";
+    }
+
     if(data.meal == true) {
       sectionTag.push( {'label':'식사','value':`${data.meal}`});
       $w("#text156").text = "식사 제공";
+    }
+    else {
+      $w("#text156").text = "제공하지 않음";
     }
     //park free가 아닌 경우
     if(data.park == "FREE") {
       sectionTag.push( {'label':'주차무료','value':`${data.park}`});
       $w("#text155").text = data.parkDetail;
+    }
+    else if(data.park == "PAID") {
+      sectionTag.push( {'label':'주차우료','value':`${data.park}`});
+      $w("#text155").text = data.parkDetail;
+    }
+    else {
+      $w("#text155").text = "제공하지 않음";
     }
       
     $w("#selectionTags4").options = sectionTag;
@@ -55,6 +69,9 @@ $w.onReady(async function () {
     
     // 이거 예외처리 생각
     var recruitNum = data.workDateResponseList[0].recruitNum;
+    if(recruitNum == null) {
+      recruitNum = 0;
+    } 
     // 모집 인원
     $w("#text124").text = `인원 ${recruitNum} 명`;
     $w("#text142").text = `${recruitNum} 명`;

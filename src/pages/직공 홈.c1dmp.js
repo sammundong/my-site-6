@@ -7,13 +7,10 @@ $w.onReady(function () {
 
 	var loginKey = session.getItem("loginKey");
     if(loginKey) {
-      $w("#button10").label = "로그아웃"
+      $w("#button10").label = "프로젝트 생성"
       $w("#button21").label = "로그아웃"
       $w("#button10").onClick(() => {
-        session.removeItem("loginKey");
-        $w("#button10").label = "로그인"
-        $w("#button21").label = "로그인"
-        wixLocation.to(`/로그인`);
+        wixLocation.to(`/general-4-1`);
       })
       $w("#button21").onClick(() => {
         session.removeItem("loginKey");
