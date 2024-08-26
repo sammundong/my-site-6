@@ -225,10 +225,9 @@ function initItemDate($item, itemData) {
 
 function initItemButtion($item, itemData) {
   $item("#button23").onClick(() => {
-    wixLocation.to(`/jobs?jobPostId=${itemData.jobPostId}`);
+    wixLocation.to(`/jobs?jobPostId=${itemData.jobPostId}&projectId=${query.projectId}`);
   });
   $item("#button24").onClick(() => {
     wixLocation.to(`/blank-4?jobPostId=${itemData.jobPostId}&projectId=${query.projectId}`);
   });
 }
- 

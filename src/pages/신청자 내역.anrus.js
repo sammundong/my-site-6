@@ -15,7 +15,7 @@ let memberIdList = [];
 let jpi = 0;
 let pji = 0;
 
-var loginKey = session.getItem("loginKey");
+var loginKey = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI`//session.getItem("loginKey");
 
 $w.onReady(async function () {
 
@@ -27,7 +27,9 @@ $w.onReady(async function () {
         wixLocation.to(`/`);
       })
     }
-    
+    $w("#text142").collapse;
+    $w("#text141").collapse;
+
     const query = wixLocation.query;
     jpi = query.jobPostId
     pji = query.projectId
@@ -35,7 +37,7 @@ $w.onReady(async function () {
     const url = `https://asdfdsas.p-e.kr/api/job-post/worker/${query.jobPostId}`
     var { data, message } = await getDataWithGetMethod(url, loginKey);
     console.log(data);
-
+  
     let workDateList = []
     workDateList = data.workDateResponseList
     
@@ -47,6 +49,11 @@ $w.onReady(async function () {
     }
     $w("#repeater7").data = combinedContent;
     console.log($w("#repeater7").data)
+    if(combinedContent.length == 0) {
+      $w("#text141").text = "지원 인원이 없습니다.";
+      $w("#text141").show;
+    }
+
     initComponents7();
 
     // 8
@@ -59,6 +66,10 @@ $w.onReady(async function () {
     console.log(combinedContent)
     $w("#repeater8").data = combinedContent;
     console.log($w("#repeater8").data)
+    if(combinedContent.length == 0) {
+      $w("#text142").text = "확정된 인원이 없습니다.";
+      $w("#text142").show;
+    }
     initComponents8();
 
     $w("#button24").onClick(() => {
@@ -109,7 +120,7 @@ function process_request(bool, jid, wid) {
 
 
 async function gDWGM(url, workDate, workId) {
-    const data = await getDataWithGetMethod(url);
+    const data = await getDataWithGetMethod(url, loginKey);
       //console.log("가져온 데이터:", data);
       for(let i = 0; i < data.data.content.length; i++) {
         data.data.content[i].memberResponse._id = `${combinedContent.length + 1}`;

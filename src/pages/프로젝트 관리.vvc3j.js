@@ -85,7 +85,6 @@ function initComponents() {
   
   function initRepeater() {
     $w("#listRepeater").onItemReady(($item, itemData, index) => {
-      //initItemBackground($item, itemData)
       initItemCondition($item, itemData)
       initItemTitle($item, itemData)
       initItemAddress($item, itemData)

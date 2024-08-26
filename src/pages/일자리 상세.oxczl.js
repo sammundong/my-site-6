@@ -152,7 +152,28 @@ $w.onReady(async function () {
     $w("#text166").text = data.phone
     $w("#text167").text = data.manager
 
-    /* $w("#button21").onClick(() => {
-      wixLocation.to(`/지원하기?jobPostId=${data.jobPostId}`);
-    }) */
+    $w("#button23").onClick(() => {
+      const options = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${loginKey}`
+        },
+      };
+      // 외부 API에 데이터 삽입 요청
+      fetch(`https://asdfdsas.p-e.kr/api/job-post/company/${query.jobPostId}`, options)
+      .then(response => response.json())
+      .then(data => {
+          // 삽입 성공 시 처리
+          // const fullData = { ...project, ...data };
+          console.log("데이터 제거 성공:", data);
+          //$w('#text142').text = "회원 정보가 성공적으로 등록되었습니다.";
+          wixLocation.to(`/general-4?projectId=${query.projectId}`);
+      })
+      .catch((error) => {
+          // 삽입 실패 시 처리
+          console.error("데이터 제거 실패:", error);
+          //$w('#text142').text = "회원 정보 등록에 실패했습니다.";
+      });
+    }) 
 });
