@@ -7,6 +7,7 @@ import { session } from 'wix-storage-frontend';
 
 let combinedContent = [];
 var loginKey = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI` // session.getItem("loginKey");
+let page = 0;
 
 $w.onReady(async function () {
   if(loginKey) {
@@ -30,6 +31,7 @@ $w.onReady(async function () {
       await gDWGM("COMPLETED");
 
       // 모든 데이터를 combinedContent에 합친 후 listRepeater에 설정
+      console.log(combinedContent)
       $w("#listRepeater").data = combinedContent;
       console.log($w("#listRepeater").data)
       
@@ -54,22 +56,23 @@ $w.onReady(async function () {
   });
 
 async function gDWGM(condition) {
-    const data = await getDataWithGetMethod(`https://asdfdsas.p-e.kr/api/project/list?projectStatus=${condition}`, loginKey);
+    const data = await getDataWithGetMethod(`https://asdfdsas.p-e.kr/api/project/list?projectStatus=${condition}&page=${page}&size=10`, loginKey);
     console.log("가져온 데이터:", data);
 
     // Repeater에 데이터 연결
-    for(let i = 0; i < data.data.length; i++) {
-        data.data[i]._id = `${combinedContent.length + 1}`;
+    for(let i = 0; i < data.data.content.length; i++) {
+        data.data.content[i]._id = `${combinedContent.length + 1}`;
+        console.log(data.data.content);
         if(condition == "IN_PROGRESS") {
-          data.data[i].condition = "진행 중";
+          data.data.content[i].condition = "진행 중";
         }
         else if(condition == "COMPLETED") {
-          data.data[i].condition = "완료";
+          data.data.content[i].condition = "완료";
         }
         else if(condition == "PLANNED") {
-          data.data[i].condition = "예정";
+          data.data.content[i].condition = "예정";
         }
-        combinedContent.push(data.data[i]);
+        combinedContent.push(data.data.content[i]);
     }
 }
 

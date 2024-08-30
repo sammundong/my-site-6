@@ -94,10 +94,29 @@ async function formSubmit() {
     const manager = "";
     const phone = "";
     const images = $w("#uploadButton1").value
-    const description = $w('#input6').value;
+    const description = $w('#textBox1').value;
     let image = []
+    let city = '';
+    let district = '';
     // let type = []
+    if(address != "") {
+
+        const addressParts = address.formatted.split(' ');
     
+        // 각 단어를 순회하며 시와 군/구를 확인
+        addressParts.forEach(part => {
+            if (part.endsWith('시')) {
+                city = part;
+            } else if (part.endsWith('구') || part.endsWith('군')) {
+                district = part;
+            }
+        });
+    
+
+        console.log(city);
+        console.log(district);
+    }
+
     if(title == "" || tech == "" || recruitNum == null || money == null || date == null || startTime == "" || endTime == "" || address == null || preparation == "") {
         $w("#text13").text = "빈칸을 모두 채워주세요";
         $w("#text13").show();
@@ -111,7 +130,7 @@ async function formSubmit() {
     else if(park != "NONE" && parkDetail == "") {
         $w("#text13").text = "주차 정보 칸을 채워주세요";
         $w("#text13").show();
-}
+    }
 
     else {
         let imageList = null;
@@ -137,6 +156,8 @@ async function formSubmit() {
             "address" : address.formatted,
             "latitude" : latitude,
             "longitude" : longitude,
+            "city" : city,
+            "district" : district,
             "dateList" : dateList,
             "pickupList" : pickupAddressList,
             "managerName" : manager,

@@ -220,7 +220,16 @@ function initItemTitle($item, itemData) {
 }
 
 function initItemDate($item, itemData) {
-  $item("#text14").text = itemData.createdDate;
+  let date = ""
+  for(let i=0; i<itemData.workDateResponseList.length; i++) {
+    if(i != itemData.workDateResponseList.length - 1) {
+      date += `${itemData.workDateResponseList[i].date}, ` 
+    }
+    else {
+      date += `${itemData.workDateResponseList[i].date}`
+    }
+  }
+  $item("#text14").text = date;
 }
 
 function initItemButtion($item, itemData) {

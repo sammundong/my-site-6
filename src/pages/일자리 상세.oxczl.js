@@ -152,6 +152,8 @@ $w.onReady(async function () {
     $w("#text166").text = data.phone
     $w("#text167").text = data.manager
 
+    $w("#text174").text = data.description
+
     $w("#button23").onClick(() => {
       const options = {
         method: 'DELETE',
