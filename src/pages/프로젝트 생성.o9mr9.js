@@ -78,7 +78,7 @@ async function formSubmit(event) {
         today.setHours(0, 0, 0, 0); 
         let formattedToday = formatDate(today);
 
-    if(projectName == "" || startDate == null || endDate == null || address == null) {
+    if(projectName == "" || startDate == null || endDate == null || address == null || address.formatted == "") {
         $w("#text13").text = "빈칸을 모두 채워주세요";
         $w("#text13").show();
     }
@@ -99,7 +99,6 @@ async function formSubmit(event) {
         const latitude = address.location.latitude;
         const longitude = address.location.longitude;
     
-
         // 새로운 데이터 객체 생성
         const project = {
             "projectName" : projectName,
