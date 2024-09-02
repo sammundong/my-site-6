@@ -117,7 +117,7 @@ async function formSubmit() {
         console.log(district);
     }
 
-    if(title == "" || tech == "" || recruitNum == null || money == null || date == null || startTime == "" || endTime == "" || address == null || preparation == "") {
+    if(title == "" || tech == "" || recruitNum == null || money == null || date == null || startTime == "" || endTime == "" || address == null || preparation == "" || address.formatted == "") {
         $w("#text13").text = "빈칸을 모두 채워주세요";
         $w("#text13").show();
     }

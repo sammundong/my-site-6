@@ -158,7 +158,7 @@ $w.onReady(function () {
 
             let region = $w("#addressInput2").value
             joinData.region = region.formatted
-            if(!joinData.region) {
+            if(!joinData.region && region.formatted != "") {
                 checkJoinData = "false"
                 $w("#button26").label = "주소를 입력해주세요."
             }
