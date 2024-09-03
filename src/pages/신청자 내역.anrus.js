@@ -29,6 +29,8 @@ $w.onReady(async function () {
     }
     $w("#text142").collapse;
     $w("#text141").collapse;
+    $w('#button25').style.color = "#C7C7C7";
+    $w('#button25').style.borderColor = "#C7C7C7";
 
     const query = wixLocation.query;
     jpi = query.jobPostId
@@ -40,42 +42,78 @@ $w.onReady(async function () {
   
     let workDateList = []
     workDateList = data.workDateResponseList
+
+    combinedContent = [];
+      $w("#repeater8").data = [];
+      for(let i=0;i<workDateList.length;i++) {
+          const url3 = `https://asdfdsas.p-e.kr/api/apply/company/accepted/${query.jobPostId}/${workDateList[i].workDateId}?page=0&size=100`
+          await gDWGM(url3, workDateList[i].date, workDateList[i].workDateId);
+      }
+      console.log(combinedContent)
+      $w("#repeater8").data = combinedContent;
+      console.log($w("#repeater8").data)
+      if(combinedContent.length == 0) {
+        $w("#text142").text = "확정된 인원이 없습니다.";
+        $w("#text142").show;
+      }
+      initComponents8();
+      $w("#section2").collapse();
     
     // 7
-    $w("#repeater7").data = []
-    for(let i=0;i<workDateList.length;i++) {
-        const url2 = `https://asdfdsas.p-e.kr/api/apply/company/pending/${query.jobPostId}/${workDateList[i].workDateId}?page=0&size=10`
-        await gDWGM(url2, workDateList[i].date, workDateList[i].workDateId);
-    }
-    $w("#repeater7").data = combinedContent;
-    console.log($w("#repeater7").data)
-    if(combinedContent.length == 0) {
-      $w("#text141").text = "지원 인원이 없습니다.";
-      $w("#text141").show;
-    }
+    $w('#button25').onClick(async (event) => {
+      const clickedElement = event.target;
+      clickedElement.style.color = "#3971FF";
+      clickedElement.style.borderColor = "#3971FF";
 
-    initComponents7();
+      $w('#button12').style.color = "#C7C7C7";
+      $w('#button12').style.borderColor = "#C7C7C7";
+
+      $w("#repeater7").data = []
+      for(let i=0;i<workDateList.length;i++) {
+          const url2 = `https://asdfdsas.p-e.kr/api/apply/company/pending/${query.jobPostId}/${workDateList[i].workDateId}?page=0&size=100`
+          await gDWGM(url2, workDateList[i].date, workDateList[i].workDateId);
+      }
+      $w("#repeater7").data = combinedContent;
+      console.log($w("#repeater7").data)
+      if(combinedContent.length == 0) {
+        $w("#text141").text = "지원 인원이 없습니다.";
+        $w("#text141").show;
+      }
+      initComponents7();
+      $w('#Section1Regular').collapse();
+      $w('#section2').expand();
+    })
 
     // 8
-    combinedContent = [];
-    $w("#repeater8").data = [];
-    for(let i=0;i<workDateList.length;i++) {
-        const url3 = `https://asdfdsas.p-e.kr/api/apply/company/accepted/${query.jobPostId}/${workDateList[i].workDateId}?page=0&size=10`
-        await gDWGM(url3, workDateList[i].date, workDateList[i].workDateId);
-    }
-    console.log(combinedContent)
-    $w("#repeater8").data = combinedContent;
-    console.log($w("#repeater8").data)
-    if(combinedContent.length == 0) {
-      $w("#text142").text = "확정된 인원이 없습니다.";
-      $w("#text142").show;
-    }
-    initComponents8();
+    $w('#button12').onClick(async (event) => {
+      const clickedElement = event.target;
+      clickedElement.style.color = "#3971FF";
+      clickedElement.style.borderColor = "#3971FF";
 
-    $w("#button24").onClick(() => {
-      wixLocation.to(`/general-4?projectId=${query.projectId}`);
-    }) 
-});
+      $w('#button25').style.color = "#C7C7C7";
+      $w('#button25').style.borderColor = "#C7C7C7";
+      combinedContent = [];
+      $w("#repeater8").data = [];
+      for(let i=0;i<workDateList.length;i++) {
+          const url3 = `https://asdfdsas.p-e.kr/api/apply/company/accepted/${query.jobPostId}/${workDateList[i].workDateId}?page=0&size=100`
+          await gDWGM(url3, workDateList[i].date, workDateList[i].workDateId);
+      }
+      console.log(combinedContent)
+      $w("#repeater8").data = combinedContent;
+      console.log($w("#repeater8").data)
+      if(combinedContent.length == 0) {
+        $w("#text142").text = "확정된 인원이 없습니다.";
+        $w("#text142").show;
+      }
+      initComponents8();
+      $w('#section2').collapse();
+      $w('#Section1Regular').expand();
+    })
+
+      $w("#button24").onClick(() => {
+        wixLocation.to(`/general-4?projectId=${query.projectId}`);
+      }) 
+  });
 
 function process_request(bool, jid, wid) {
   
