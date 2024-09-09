@@ -27,6 +27,7 @@ $w.onReady(async function () {
         wixLocation.to(`/`);
       })
     }
+    
     $w("#text142").collapse;
     $w("#text141").collapse;
     $w('#button25').style.color = "#C7C7C7";

@@ -53,6 +53,20 @@ $w.onReady(function () {
       })
     }
     console.log(loginKey)
+
+    // 오늘 날짜 가져오기
+    let today = new Date();
+    
+    // 내일 날짜 계산
+    let tomorrow = new Date();
+    tomorrow.setDate(today.getDate() + 1);
+    
+    // DatePicker의 최소 날짜를 내일로 설정
+    $w("#datePicker1").minDate = tomorrow;
+    $w("#datePicker1").value = tomorrow;
+    $w("#datePicker2").minDate = tomorrow;
+    $w("#datePicker2").value = tomorrow;
+
     $w("#text13").hide();
     $w("#button8").onClick(formSubmit);
 });
@@ -77,6 +91,8 @@ async function formSubmit(event) {
     let today = new Date();
         today.setHours(0, 0, 0, 0); 
         let formattedToday = formatDate(today);
+    
+    console.log(address);
 
     if(projectName == "" || startDate == null || endDate == null || address == null || address.formatted == "") {
         $w("#text13").text = "빈칸을 모두 채워주세요";
