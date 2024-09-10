@@ -2,6 +2,8 @@
 import { getDataWithGetMethod } from "backend/dataFetcher";
 import { session } from "wix-storage-frontend";
 import wixLocation from 'wix-location-frontend';
+import wixWindowFrontend from "wix-window-frontend";
+
 
 $w.onReady(function () {
 

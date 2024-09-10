@@ -39,8 +39,11 @@
 
 import wixLocation from 'wix-location-frontend';
 import { session } from 'wix-storage-frontend';
+import wixWindow from 'wix-window';
+
 
 var loginKey = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI`//session.getItem("loginKey");
+let receivedMessage = null;
 
 // 페이지가 로드될 때 실행됩니다.
 $w.onReady(function () {
@@ -53,6 +56,13 @@ $w.onReady(function () {
       })
     }
     console.log(loginKey)
+
+     // wixWindow에서 메시지 수신
+     $w("#html1").onMessage((event) => {
+        receivedMessage = event.data;
+        console.log(receivedMessage)
+    });
+    
 
     // 오늘 날짜 가져오기
     let today = new Date();
@@ -87,14 +97,12 @@ async function formSubmit(event) {
     let startDate = $w("#datePicker1").value;
     let startDate2 = formatDate(startDate);
     let endDate = $w("#datePicker2").value;
-    const address = $w('#addressInput1').value;
+    
     let today = new Date();
         today.setHours(0, 0, 0, 0); 
         let formattedToday = formatDate(today);
-    
-    console.log(address);
 
-    if(projectName == "" || startDate == null || endDate == null || address == null || address.formatted == "") {
+    if(projectName == "" || startDate == null || endDate == null) {
         $w("#text13").text = "빈칸을 모두 채워주세요";
         $w("#text13").show();
     }
@@ -109,18 +117,23 @@ async function formSubmit(event) {
         $w("#text13").show();
     }
 
+    else if (receivedMessage == null) {
+        $w("#text13").text = "지도에 위치를 표시해주세요";
+        $w("#text13").show();
+    }
+
     else {
         let startDate2 = formatDate(startDate);
         let endDate2 = formatDate(endDate);
-        const latitude = address.location.latitude;
-        const longitude = address.location.longitude;
+        const latitude = receivedMessage.latitude;
+        const longitude = receivedMessage.longitude;
     
         // 새로운 데이터 객체 생성
         const project = {
             "projectName" : projectName,
             "startDate" : startDate2,
             "endDate" : endDate2,
-            "address" : address.formatted,
+            "address" : receivedMessage.address,
             "latitude" : latitude,
             "longitude" : longitude
         };
