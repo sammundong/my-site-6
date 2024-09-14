@@ -11,7 +11,7 @@ import { getDataWithGetMethod } from "backend/dataFetcher";
 import { getApiKey, kakaoApiKey } from "backend/apikey.jsw";
 import { session } from 'wix-storage-frontend';
 
-var loginKey = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI`//session.getItem("loginKey");
+var loginKey = session.getItem("loginKey");
 
 $w.onReady(async function () {
     // Write your JavaScript here
@@ -154,28 +154,30 @@ $w.onReady(async function () {
 
     $w("#text174").text = data.description
 
-    $w("#button23").onClick(() => {
-      const options = {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${loginKey}`
-        },
-      };
-      // 외부 API에 데이터 삽입 요청
-      fetch(`https://asdfdsas.p-e.kr/api/job-post/company/${query.jobPostId}`, options)
-      .then(response => response.json())
-      .then(data => {
-          // 삽입 성공 시 처리
-          // const fullData = { ...project, ...data };
-          console.log("데이터 제거 성공:", data);
-          //$w('#text142').text = "회원 정보가 성공적으로 등록되었습니다.";
-          wixLocation.to(`/general-4?projectId=${query.projectId}`);
-      })
-      .catch((error) => {
-          // 삽입 실패 시 처리
-          console.error("데이터 제거 실패:", error);
-          //$w('#text142').text = "회원 정보 등록에 실패했습니다.";
-      });
-    }) 
+    $w("#button23").onClick(async () => {
+      // Lightbox를 열고 결과 대기
+      let result = await wixWindow.openLightbox("확인창");
+
+      if (result === "confirmed") {
+          const options = {
+              method: 'DELETE',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${loginKey}`
+              },
+          };
+          // 외부 API에 데이터 삭제 요청
+          fetch(`https://asdfdsas.p-e.kr/api/job-post/company/${query.jobPostId}`, options)
+          .then(response => response.json())
+          .then(data => {
+              console.log("데이터 제거 성공:", data);
+              wixLocation.to(`/general-4?projectId=${query.projectId}`);
+          })
+          .catch((error) => {
+              console.error("데이터 제거 실패:", error);
+          });
+      } else {
+          console.log("삭제가 취소되었습니다.");
+      }
+  });
 });

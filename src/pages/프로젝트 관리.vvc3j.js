@@ -6,7 +6,7 @@ import { session } from 'wix-storage-frontend';
 // “Hello, World!” Example: https://learn-code.wix.com/en/article/hello-world
 
 let combinedContent = [];
-var loginKey = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI` // session.getItem("loginKey");
+var loginKey = session.getItem("loginKey");
 let page = 0;
 
 $w.onReady(async function () {

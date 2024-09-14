@@ -4,7 +4,7 @@ import wixLocation from 'wix-location-frontend';
 import { session } from 'wix-storage-frontend';
 import { getDataWithGetMethod } from "backend/dataFetcher";
 
-var loginKey = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI`//session.getItem("loginKey");
+var loginKey = session.getItem("loginKey");
 const query = wixLocation.query;
 
 $w.onReady(async function () {

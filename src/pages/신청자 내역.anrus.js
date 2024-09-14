@@ -15,7 +15,7 @@ let memberIdList = [];
 let jpi = 0;
 let pji = 0;
 
-var loginKey = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI`//session.getItem("loginKey");
+var loginKey = session.getItem("loginKey");
 
 $w.onReady(async function () {
 

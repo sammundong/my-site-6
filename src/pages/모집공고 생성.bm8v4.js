@@ -35,7 +35,7 @@ import { session } from 'wix-storage-frontend';
 
 //import { fetch } from 'wix-fetch';
 
-var loginKey = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiYWJjZGVmZzAiLCJleHAiOjE3MjYyMjY3NDB9.fztvihYHiIqMviCdHRxu5CBbCv9yN3gOIQy_8U4olMI`//session.getItem("loginKey");
+var loginKey = session.getItem("loginKey");
 
 // 페이지가 로드될 때 실행됩니다.
 $w.onReady(function () {
