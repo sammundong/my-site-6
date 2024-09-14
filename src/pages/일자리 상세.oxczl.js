@@ -156,7 +156,7 @@ $w.onReady(async function () {
 
     $w("#button23").onClick(async () => {
       // Lightbox를 열고 결과 대기
-      let result = await wixWindow.openLightbox("확인창");
+      let result = await wixWindow.openLightbox("모집공고삭제창");
 
       if (result === "confirmed") {
           const options = {
@@ -171,10 +171,16 @@ $w.onReady(async function () {
           .then(response => response.json())
           .then(data => {
               console.log("데이터 제거 성공:", data);
-              wixLocation.to(`/general-4?projectId=${query.projectId}`);
+              if(data.data.errorMessage) {
+                wixWindow.openLightbox("오류 확인창", { "message": data.data.errorMessage });
+              }
+              else {
+                wixLocation.to(`/general-4?projectId=${query.projectId}`);
+              }
           })
           .catch((error) => {
               console.error("데이터 제거 실패:", error);
+              wixWindow.openLightbox("오류 확인창", { "message": "데이터 제거 실패: " + error.message });
           });
       } else {
           console.log("삭제가 취소되었습니다.");

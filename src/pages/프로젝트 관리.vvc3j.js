@@ -1,6 +1,7 @@
 import { getDataWithGetMethod } from "backend/dataFetcher";
 import wixLocation from 'wix-location-frontend';
 import { session } from 'wix-storage-frontend';
+import wixWindow from 'wix-window-frontend';
 
 // API Reference: https://www.wix.com/velo/reference/api-overview/introduction
 // “Hello, World!” Example: https://learn-code.wix.com/en/article/hello-world
@@ -56,7 +57,7 @@ $w.onReady(async function () {
   });
 
 async function gDWGM(condition) {
-    const data = await getDataWithGetMethod(`https://asdfdsas.p-e.kr/api/project/list?projectStatus=${condition}&page=${page}&size=10`, loginKey);
+    const data = await getDataWithGetMethod(`https://asdfdsas.p-e.kr/api/project/list?projectStatus=${condition}&page=${page}&size=100`, loginKey);
     console.log("가져온 데이터:", data);
 
     // Repeater에 데이터 연결
@@ -114,4 +115,37 @@ function initComponents() {
     $item("#button9").onClick(() => {
       wixLocation.to(`/general-4?projectId=${itemData.projectId}`);
     })
+    $w("#button23").onClick(async () => {
+      // Lightbox를 열고 결과 대기
+      let result = await wixWindow.openLightbox("프로젝트삭제창");
+
+      if (result === "confirmed") {
+          const options = {
+              method: 'DELETE',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${loginKey}`
+              },
+          };
+          // 외부 API에 데이터 삭제 요청
+          fetch(`https://asdfdsas.p-e.kr/api/project/${itemData.projectId}`, options)
+          .then(response => response.json())
+          .then(data => {
+              console.log("데이터 제거 성공:", data);
+              if(data.data.errorMessage) {
+                wixWindow.openLightbox("오류 확인창", { "message": data.data.errorMessage });
+              }
+              else {
+                wixLocation.to(`/`);
+                wixLocation.to(`/jobs-4`);
+              }
+          })
+          .catch((error) => {
+              console.error("데이터 제거 실패:", error);
+              wixWindow.openLightbox("오류 확인창", { "message": "데이터 제거 실패: " + error.message });
+          });
+      } else {
+          console.log("삭제가 취소되었습니다.");
+      }
+  });
   }
