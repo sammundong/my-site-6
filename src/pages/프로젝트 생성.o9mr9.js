@@ -61,6 +61,7 @@ $w.onReady(function () {
      $w("#html1").onMessage((event) => {
         receivedMessage = event.data;
         console.log(receivedMessage)
+        $w("#text158").text = receivedMessage.address
     });
     
 
