@@ -28,8 +28,8 @@ $w.onReady(async function () {
       })
     }
     
-    $w("#text142").collapse;
-    $w("#text141").collapse;
+    $w("#text142").hide();
+    $w("#text141").hide();
     $w('#button25').style.color = "#C7C7C7";
     $w('#button25').style.borderColor = "#C7C7C7";
 
@@ -102,6 +102,7 @@ $w.onReady(async function () {
       console.log(combinedContent)
       $w("#repeater8").data = combinedContent;
       console.log($w("#repeater8").data)
+
       if(combinedContent.length == 0) {
         $w("#text142").text = "확정된 인원이 없습니다.";
         $w("#text142").show;

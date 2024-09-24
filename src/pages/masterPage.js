@@ -37,4 +37,20 @@ $w.onReady(function () {
         })
       }
     }
+    else {
+      if(loginKey) {
+        $w("#button21").label = "로그아웃"
+        $w("#button21").onClick(() => {
+        session.removeItem("loginKey");
+        $w("#button21").label = "로그인"
+        wixLocation.to(`/`);
+        })
+      }
+      else {
+        $w("#button21").onClick(() => {
+        $w("#button21").label = "로그인"
+        wixLocation.to(`/로그인`);
+        })
+      }
+    }
 });
