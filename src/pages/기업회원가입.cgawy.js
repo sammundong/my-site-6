@@ -131,6 +131,9 @@ $w.onReady(function () {
 
             joinData.deviceToken = "token"
             joinData.isNotification = true
+
+            joinData.privacyConsent = true
+            joinData.isNotification = true
             
             joinData.companyName = $w("#input13").value 
             if(!joinData.companyName) {
@@ -184,12 +187,13 @@ $w.onReady(function () {
                     body: JSON.stringify(joinData)
                 })
                 const responseJoinData = await joinResponse.json()
-    
+                
                 if (responseJoinData.message == "기업 회원 가입 완료") {
                     $w("#button26").label = responseJoinData.message
                     wixLocation.to(`/로그인`);
                 }
                 else {
+                    console.log(responseJoinData)
                     $w("#button26").label = "회원 가입 오류 : 재작성 및 재시도 부탁드립니다."
                 }
             }

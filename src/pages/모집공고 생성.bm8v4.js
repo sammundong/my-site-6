@@ -93,13 +93,23 @@ async function formSubmit() {
     const preparation = $w('#input5').value;
     const manager = "";
     const phone = "";
-    const images = $w("#uploadButton1").value
+    // const images = $w("#uploadButton1").value
+    let imageUrls = []
+    $w("#uploadButton1")
+        .uploadFiles()
+        .then((uploadedFiles) => {
+            uploadedFiles.forEach((uploadedFile) => {
+                console.log("File url:", uploadedFile.fileUrl);
+                imageUrls.push(uploadedFile.fileUrl);
+            });
+        })
+
     const description = $w('#textBox1').value;
     let image = []
     let city = '';
     let district = '';
     // let type = []
-    if(address != "") {
+    if(address != "" || address != null || address == []) {
 
         const addressParts = address.formatted.split(' ');
     
@@ -111,7 +121,6 @@ async function formSubmit() {
                 district = part;
             }
         });
-    
 
         console.log(city);
         console.log(district);
@@ -174,18 +183,9 @@ async function formSubmit() {
         formData.append('request', new Blob([JSON.stringify(data.request)], {
             type: "application/json",
         }));
-
-        if (images == null) {
-            // 이미지 리스트가 null일 경우 빈 배열을 전송
-            console.log('No images to upload');
-        } else {
-            images.forEach((image, index) => {
-                formData.append('imageList', image); // 파일 자체를 추가
-            });
-            
-            console.log('Images appended to FormData');
-        }
-
+        
+        formData.append('imageList', JSON.stringify(imageUrls)); // 파일 자체를 추가
+        
         console.log(request)
         const options = {
             method: 'POST',
