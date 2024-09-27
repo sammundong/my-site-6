@@ -41,13 +41,24 @@ var loginKey = session.getItem("loginKey");
 $w.onReady(function () {
     try {
         if(loginKey) {
-        $w("#button21").label = "로그아웃"
-        $w("#button21").onClick(() => {
-            session.removeItem("loginKey");
-            $w("#button21").label = "로그인"
-            wixLocation.to(`/`);
-        })
+            $w("#button21").label = "로그아웃"
+            $w("#button21").onClick(() => {
+                session.removeItem("loginKey");
+                $w("#button21").label = "로그인"
+                wixLocation.to(`/`);
+            })
         }
+        // 오늘 날짜 가져오기
+        let today = new Date();
+        
+        // 내일 날짜 계산
+        let tomorrow = new Date();
+        tomorrow.setDate(today.getDate() + 1);
+        
+        // DatePicker의 최소 날짜를 내일로 설정
+        $w("#datePicker1").minDate = tomorrow;
+        $w("#datePicker1").value = tomorrow;
+
         $w("#text13").hide();
         $w("#button8").onClick(formSubmit);
     } catch (error) {
@@ -126,7 +137,7 @@ async function formSubmit() {
         console.log(district);
     }
 
-    if(title == "" || tech == "" || recruitNum == null || money == null || date == null || startTime == "" || endTime == "" || address == null || preparation == "" || address.formatted == "") {
+    if(title == "" || tech == "" || recruitNum == null || money == null || date == null || startTime == "" || endTime == "" || address == null || address.formatted == "") {
         $w("#text13").text = "빈칸을 모두 채워주세요";
         $w("#text13").show();
     }

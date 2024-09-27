@@ -98,8 +98,6 @@ $w.onReady(function () {
         }
     })
 
-
-
     $w("#button26").onClick(async () => {
         let password = $w("#input17").value;
         let repassword = $w("#input16").value;
