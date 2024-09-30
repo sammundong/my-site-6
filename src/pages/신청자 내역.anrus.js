@@ -16,6 +16,7 @@ let jpi = 0;
 let pji = 0;
 
 var loginKey = session.getItem("loginKey");
+let tech = "";
 
 $w.onReady(async function () {
 
@@ -40,7 +41,8 @@ $w.onReady(async function () {
     const url = `https://asdfdsas.p-e.kr/api/job-post/worker/${query.jobPostId}`
     var { data, message } = await getDataWithGetMethod(url, loginKey);
     console.log(data);
-  
+    tech = data.tech
+
     let workDateList = []
     workDateList = data.workDateResponseList
 
@@ -162,12 +164,23 @@ function process_request(bool, jid, wid) {
 async function gDWGM(url, workDate, workId) {
     const data = await getDataWithGetMethod(url, loginKey);
       //console.log("가져온 데이터:", data);
+      console.log(data);
       for(let i = 0; i < data.data.content.length; i++) {
         data.data.content[i].memberResponse._id = `${combinedContent.length + 1}`;
         data.data.content[i].memberResponse.date = workDate
         data.data.content[i].memberResponse.dateId = workId 
         data.data.content[i].memberResponse.applyId = data.data.content[i].applyId      
         combinedContent.push(data.data.content[i].memberResponse);
+
+
+        for(let j=0; j<data.data.content[i].memberResponse.workExperienceResponseList.length; j++) {
+          if(tech == data.data.content[i].memberResponse.workExperienceResponseList[j].tech) {
+            data.data.content[i].memberResponse.experience = data.data.content[i].memberResponse.workExperienceResponseList[j].experienceMonths;
+          }
+          else {
+            data.data.content[i].memberResponse.experience = 0;
+          }
+        }
       }
     }
   
@@ -185,7 +198,7 @@ async function gDWGM(url, workDate, workId) {
         initItemName($item, itemData)
         initItemPhone($item, itemData)
         initItemInfo($item, itemData)
-        initItemDate($item, itemData)
+        initItemHasVisa($item, itemData)
         initItemButtion($item, itemData)
       });
     }
@@ -199,16 +212,22 @@ async function gDWGM(url, workDate, workId) {
     }
 
     function initItemInfo($item, itemData) {
-        if(itemData.gender == "MALE") {
-            $item("#text133").text = itemData.age + ", 남, " + itemData.workTimes + "번 출역" ;
-        }
-        else {
-            $item("#text133").text = itemData.age + ", 여, " + itemData.workTimes + "번 출역" ;
-        }
+      
+      if(itemData.gender == "MALE") {
+          $item("#text133").text = itemData.age + ", 남, 경력 " + itemData.experience + "개월" ;
       }
+      else {
+          $item("#text133").text = itemData.age + ", 여, 경력 " + itemData.experience + "개월" ;
+      }
+    }
   
-    function initItemDate($item, itemData) {
-      $item("#text138").text = itemData.date;
+    function initItemHasVisa($item, itemData) {
+      if(itemData.hasVisa == true) {
+        $item("#text138").text = "비자 O";
+      }
+      else {
+        $item("#text138").text = "비자 X";
+      }
     }
 
     function initItemButtion($item, itemData) {
@@ -230,7 +249,7 @@ async function gDWGM(url, workDate, workId) {
         initItemName8($item, itemData)
         initItemPhone8($item, itemData)
         initItemInfo8($item, itemData)
-        initItemDate8($item, itemData)
+        initItemHasVisa8($item, itemData)
         //initItemButtion($item, itemData)
       });
     }
@@ -244,13 +263,18 @@ async function gDWGM(url, workDate, workId) {
 
     function initItemInfo8($item, itemData) {
         if(itemData.gender == "MALE") {
-            $item("#text136").text = itemData.age + ", 남, " + itemData.workTimes + "번 출역" ;
+            $item("#text136").text = itemData.age + ", 남, 경력 " + itemData.experience + "개월" ;
         }
         else {
-            $item("#text136").text = itemData.age + ", 여, " + itemData.workTimes + "번 출역" ;
+            $item("#text136").text = itemData.age + ", 여, 경력 " + itemData.experience + "개월" ;
         }
       }
   
-    function initItemDate8($item, itemData) {
-      $item("#text139").text = itemData.date;
+    function initItemHasVisa8($item, itemData) {
+      if(itemData.hasVisa == true) {
+        $item("#text139").text = "비자 여부 : O";
+      }
+      else {
+        $item("#text139").text = "비자 여부 : X";
+      }
     }
