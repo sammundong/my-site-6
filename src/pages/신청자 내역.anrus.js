@@ -28,9 +28,10 @@ $w.onReady(async function () {
         wixLocation.to(`/`);
       })
     }
-    
+
     $w("#text142").hide();
     $w("#text141").hide();
+    
     $w('#button25').style.color = "#C7C7C7";
     $w('#button25').style.borderColor = "#C7C7C7";
 
@@ -57,8 +58,9 @@ $w.onReady(async function () {
       console.log($w("#repeater8").data)
       if(combinedContent.length == 0) {
         $w("#text142").text = "확정된 인원이 없습니다.";
-        $w("#text142").show;
+        $w("#text142").show();
       }
+    
       initComponents8();
       $w("#section2").collapse();
     
@@ -71,6 +73,7 @@ $w.onReady(async function () {
       $w('#button12').style.color = "#C7C7C7";
       $w('#button12').style.borderColor = "#C7C7C7";
 
+      combinedContent = [];
       $w("#repeater7").data = []
       for(let i=0;i<workDateList.length;i++) {
           const url2 = `https://asdfdsas.p-e.kr/api/apply/company/pending/${query.jobPostId}/${workDateList[i].workDateId}?page=0&size=100`
@@ -80,7 +83,7 @@ $w.onReady(async function () {
       console.log($w("#repeater7").data)
       if(combinedContent.length == 0) {
         $w("#text141").text = "지원 인원이 없습니다.";
-        $w("#text141").show;
+        $w("#text141").show();
       }
       initComponents7();
       $w('#Section1Regular').collapse();
@@ -222,19 +225,35 @@ async function gDWGM(url, workDate, workId) {
     }
   
     function initItemHasVisa($item, itemData) {
-      if(itemData.hasVisa == true) {
+      if(itemData.nationality == "KOREAN") {
+        $item("#text138").text = "한국인";
+      }
+
+      else if(itemData.hasVisa == true) {
         $item("#text138").text = "비자 O";
       }
-      else {
+      else if(itemData.hasVisa == false){
         $item("#text138").text = "비자 X";
       }
     }
 
-    function initItemButtion($item, itemData) {
-        $item("#button22").onClick(() => {
-          applyIdList.push(itemData.applyId);
-          memberIdList.push(itemData.memberId);
-          process_request(true, jpi, itemData.dateId)
+    function initItemButtion($item, itemData, async) {
+        $item("#button22").onClick(async () => {
+          if(itemData.hasVisa == false && itemData.nationality != "KOREAN") {
+            var result = await wixWindow.openLightbox("비자여부확인창");
+
+            if(result == "sure") {
+              applyIdList.push(itemData.applyId);
+              memberIdList.push(itemData.memberId);
+              process_request(true, jpi, itemData.dateId)
+            }
+          }
+
+          else {
+            applyIdList.push(itemData.applyId);
+            memberIdList.push(itemData.memberId);
+            process_request(true, jpi, itemData.dateId)
+          }
         }) 
         $item("#button23").onClick(() => {
           applyIdList.push(itemData.applyId);
@@ -245,12 +264,10 @@ async function gDWGM(url, workDate, workId) {
 
     function initRepeater8() {
       $w("#repeater8").onItemReady(($item, itemData, index) => {
-        //initItemBackground($item, itemData)
         initItemName8($item, itemData)
         initItemPhone8($item, itemData)
         initItemInfo8($item, itemData)
         initItemHasVisa8($item, itemData)
-        //initItemButtion($item, itemData)
       });
     }
     function initItemName8($item, itemData) {
@@ -271,10 +288,13 @@ async function gDWGM(url, workDate, workId) {
       }
   
     function initItemHasVisa8($item, itemData) {
-      if(itemData.hasVisa == true) {
+      if(itemData.nationality == "KOREAN") {
+        $item("#text139").text = "한국인";
+      }
+      else if(itemData.hasVisa == true) {
         $item("#text139").text = "비자 여부 : O";
       }
-      else {
+      else if(itemData.hasVisa == false){
         $item("#text139").text = "비자 여부 : X";
       }
     }

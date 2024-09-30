@@ -68,16 +68,13 @@ $w.onReady(function () {
         $w("#text13").hide();
 
         $w("#button22").onClick(async () => {
-            console.log("1")
             let result = await wixWindow.openLightbox("픽업장소창");
-            console.log("2")
 
             pickupAddressList.push({
                 'value':result.formatted,
                 'label':result.formatted
             })
             $w("#selectionTags1").options = pickupAddressList
-            console.log(pickupAddressList)
         });
 
         $w("#button8").onClick(formSubmit);
