@@ -32,10 +32,13 @@
 import { query } from 'wix-data';
 import wixLocation from 'wix-location-frontend';
 import { session } from 'wix-storage-frontend';
+import wixWindow from 'wix-window-frontend';
 
 //import { fetch } from 'wix-fetch';
 
 var loginKey = session.getItem("loginKey");
+
+var pickupAddressList = []
 
 // 페이지가 로드될 때 실행됩니다.
 $w.onReady(function () {
@@ -48,6 +51,9 @@ $w.onReady(function () {
                 wixLocation.to(`/`);
             })
         }
+
+        $w("#selectionTags1").options = pickupAddressList
+
         // 오늘 날짜 가져오기
         let today = new Date();
         
@@ -60,6 +66,20 @@ $w.onReady(function () {
         $w("#datePicker1").value = tomorrow;
 
         $w("#text13").hide();
+
+        $w("#button22").onClick(async () => {
+            console.log("1")
+            let result = await wixWindow.openLightbox("픽업장소창");
+            console.log("2")
+
+            pickupAddressList.push({
+                'value':result.formatted,
+                'label':result.formatted
+            })
+            $w("#selectionTags1").options = pickupAddressList
+            console.log(pickupAddressList)
+        });
+
         $w("#button8").onClick(formSubmit);
     } catch (error) {
         console.error('Error:', error);
@@ -92,12 +112,7 @@ async function formSubmit() {
     const endTime = $w('#timePicker2').value;
     const address = $w('#addressInput1').value;
     const pickup = ($w('#radioGroup1').value === 'False') ? false : true;
-    const pickupAddressList = []
-    console.log(pickup)
-    console.log($w('#radioGroup1').value)
-    if (pickup == true) {
-        pickupAddressList.push($w('#addressInput2').value.formatted)
-    }
+
     const meal = ($w('#radioGroup2').value === 'false') ? false : true;
     const park = $w('#radioGroup3').value;
     const parkDetail = $w('#input4').value;
@@ -143,7 +158,7 @@ async function formSubmit() {
     }
 
     else if(pickup == true && pickupAddressList == []) {
-            $w("#text13").text = "픽업 주소 칸을 채워주세요";
+            $w("#text13").text = "픽업 주소를 추가해주세요";
             $w("#text13").show();
     }
 
