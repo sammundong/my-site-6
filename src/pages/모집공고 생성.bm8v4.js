@@ -154,6 +154,11 @@ async function formSubmit() {
         $w("#text13").show();
     }
 
+    else if(typeof address.latitude == "undefined") {
+        $w("#text13").text = "주소에 위도와 경도가 존재하지 않습니다. 좀 더 넓은 범위의 주소를 작성해주십시오.";
+        $w("#text13").show();
+    }
+
     else if(pickup == true && pickupAddressList == []) {
             $w("#text13").text = "픽업 주소를 추가해주세요";
             $w("#text13").show();

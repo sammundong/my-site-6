@@ -36,6 +36,8 @@ $w.onReady(function () {
             const responseData = await smsResponse.json()
             authPhoneCode = responseData.data.authCode
             console.log(authPhoneCode);
+            $w("#text185").show()
+            $w("#text185").text = "인증번호가 발송되었습니다."
         }
         else {
             $w("#text185").show()
@@ -161,7 +163,7 @@ $w.onReady(function () {
             joinData.region = region.formatted
             if(!joinData.region && region.formatted != "") {
                 checkJoinData = "false"
-                $w("#button26").label = "주소를 입력해주세요."
+                $w("#button26").label = "회사 주소를 입력해주세요."
             }
            
             joinData.bank = $w("#dropdown3").value
