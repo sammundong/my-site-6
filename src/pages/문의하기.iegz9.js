@@ -12,7 +12,6 @@ var loginKey = session.getItem("loginKey");
 
 $w.onReady(function () {
     if(loginKey) {
-        $w("#section2").collapse();
         $w("#button21").label = "로그아웃"
         $w("#button21").onClick(() => {
           session.removeItem("loginKey");
