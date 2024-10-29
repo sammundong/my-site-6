@@ -20,10 +20,10 @@ $w.onReady(function () {
         })
         $w("#text128").text = "미구현 입니다. 문의 시 QKfmsansdml@gmail.com으로 연락주십시오.";
         $w("#section1").collapse();
-        $w("button24").collapse();
-        $w("button25").collapse();
+        $w("#button24").collapse();
+        $w("#button25").collapse();
       }
-      else {
+    else {
         $w("#text128").text = "로그인 후 이용해주세요.";
         $w("#section1").collapse();
       }
