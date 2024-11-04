@@ -21,6 +21,10 @@ $w.onReady(async function () {
         const url = `https://asdfdsas.p-e.kr/api/member-info/company`
         var { data, message } = await getDataWithGetMethod(url, loginKey);
 
+        if(!data.businessNumber) {
+            $w("#section2").collapse();
+            $w("#text159").text = "노동자 권한으로 로그인 되었습니다."
+        }
         $w("#input1").value = data.businessNumber;
         $w("#input2").value = data.email;
         $w("#input3").value = data.companyName;

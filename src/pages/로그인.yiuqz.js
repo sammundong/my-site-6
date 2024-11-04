@@ -33,6 +33,9 @@ $w.onReady(function () {
               if (responseData.data.errorMessage) {
                 $w("#text157").text = responseData.data.errorMessage;
               }
+              else if (responseData.data.role == "ROLE_WORKER") {
+                $w("#text157").text = "노동자 권한으로 로그인을 시도하였습니다.";
+              }
               else {
                 session.setItem("loginKey", responseData.data.accessToken);
                 $w("#text157").text = "로그인이 완료되었습니다.!"
