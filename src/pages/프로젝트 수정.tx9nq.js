@@ -37,7 +37,7 @@ $w.onReady(async function () {
     
     $w('#button8').onClick( async() => {
 
-        let result = await wixWindow.openLightbox("모집공고삭제창");
+        let result = await wixWindow.openLightbox("프로젝트수정창");
         
         if (result === "confirmed") {
             let latitude;

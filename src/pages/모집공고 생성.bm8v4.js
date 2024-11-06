@@ -42,6 +42,7 @@ var pickupAddressList = []
 
 // 페이지가 로드될 때 실행됩니다.
 $w.onReady(function () {
+    $w("#button22").disable();
     try {
         if(loginKey) {
             $w("#button21").label = "로그아웃"
@@ -52,6 +53,16 @@ $w.onReady(function () {
             })
         }
 
+        $w("#radioGroup1").onClick((event) => {
+            let selectedIndex = $w("#radioGroup1").selectedIndex;
+            if(selectedIndex == 1) {
+                $w("#button22").disable();
+            }
+            else {
+                $w("#button22").enable();
+            }
+          });
+        
         $w("#selectionTags1").options = pickupAddressList
 
         // 오늘 날짜 가져오기
@@ -118,14 +129,14 @@ async function formSubmit() {
     const phone = "";
     // const images = $w("#uploadButton1").value
     let imageUrls = []
-    $w("#uploadButton1")
+    /* $w("#uploadButton1")
         .uploadFiles()
         .then((uploadedFiles) => {
             uploadedFiles.forEach((uploadedFile) => {
                 console.log("File url:", uploadedFile.fileUrl);
                 imageUrls.push(uploadedFile.fileUrl);
             });
-        })
+        }) */
 
     const description = $w('#textBox1').value;
     let image = []
@@ -154,8 +165,9 @@ async function formSubmit() {
         $w("#text13").show();
     }
 
-    else if(typeof address.latitude == "undefined") {
+    else if(typeof address.location.latitude == "undefined") {
         $w("#text13").text = "주소에 위도와 경도가 존재하지 않습니다. 좀 더 넓은 범위의 주소를 작성해주십시오.";
+        console.log(address)
         $w("#text13").show();
     }
 
@@ -227,7 +239,7 @@ async function formSubmit() {
         // 외부 API에 데이터 삽입 요청
         fetch(`https://asdfdsas.p-e.kr/api/job-post/company`, options)
             .then(response => response.json())
-            .then(data => {
+            .then(async data => {
                 // 삽입 성공 시 처리
                 // const fullData = { ...project, ...data };
                 $w("#text13").text = "프로젝트 생성이 완료되었습니다.";
@@ -243,7 +255,10 @@ async function formSubmit() {
                     }
                 }
                 else {
-                    wixLocation.to(`/general-4?projectId=${query.projectId}`);
+                    let result = await wixWindow.openLightbox("모집공고생성확인창");
+                    if(result == "confirmed") {
+                        wixLocation.to(`/general-4?projectId=${query.projectId}`);
+                    }
                 }
             })
             .catch((error) => {
