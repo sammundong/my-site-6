@@ -207,7 +207,7 @@ $w.onReady(async function () {
           .then(response => response.json())
           .then(data => {
               console.log("데이터 제거 성공:", data);
-              if(data.data.errorMessage) {
+              if(data.data) {
                 wixWindow.openLightbox("오류 확인창", { "message": data.data.errorMessage });
               }
               else {
@@ -221,5 +221,11 @@ $w.onReady(async function () {
       } else {
           console.log("삭제가 취소되었습니다.");
       }
+  });
+  $w("#button24").onClick(async () => {
+    wixLocation.to(`/blank-4?jobPostId=${query.jobPostId}&projectId=${query.projectId}`);
+  });
+  $w("#button25").onClick(async () => {
+    wixLocation.to(`/general-4?projectId=${query.projectId}`);
   });
 });

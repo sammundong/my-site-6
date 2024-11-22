@@ -29,7 +29,7 @@
   "projectId": 1
 } */
 
-import { query } from 'wix-data';
+
 import wixLocation from 'wix-location-frontend';
 import { session } from 'wix-storage-frontend';
 import wixWindow from 'wix-window-frontend';
@@ -40,8 +40,11 @@ var loginKey = session.getItem("loginKey");
 
 var pickupAddressList = []
 
+let imageUrls = []; // 업로드된 이미지 파일을 저장할 배열
+
 // 페이지가 로드될 때 실행됩니다.
 $w.onReady(function () {
+    const query = wixLocation.query;
     $w("#button22").disable();
     try {
         if(loginKey) {
@@ -62,6 +65,7 @@ $w.onReady(function () {
                 $w("#button22").enable();
             }
           });
+        
         
         $w("#selectionTags1").options = pickupAddressList
 
@@ -93,6 +97,9 @@ $w.onReady(function () {
         console.error('Error:', error);
         showErrorToUser(error.message);
     }
+    $w("#button25").onClick(async () => {
+        wixLocation.to(`/general-4?projectId=${query.projectId}`);
+      });
 });
 
 function showErrorToUser(errorMessage) {
@@ -127,23 +134,13 @@ async function formSubmit() {
     const preparation = $w('#input5').value;
     const manager = "";
     const phone = "";
-    // const images = $w("#uploadButton1").value
-    let imageUrls = []
-    /* $w("#uploadButton1")
-        .uploadFiles()
-        .then((uploadedFiles) => {
-            uploadedFiles.forEach((uploadedFile) => {
-                console.log("File url:", uploadedFile.fileUrl);
-                imageUrls.push(uploadedFile.fileUrl);
-            });
-        }) */
-
     const description = $w('#textBox1').value;
     let image = []
     let city = '';
     let district = '';
     // let type = []
-    if(address != "" || address != null || address == []) {
+    console.log(address)
+    if(address) {
 
         const addressParts = address.formatted.split(' ');
     
@@ -165,8 +162,8 @@ async function formSubmit() {
         $w("#text13").show();
     }
 
-    else if(typeof address.location.latitude == "undefined") {
-        $w("#text13").text = "주소에 위도와 경도가 존재하지 않습니다. 좀 더 넓은 범위의 주소를 작성해주십시오.";
+    else if(!address.location) {
+        $w("#text13").text = "주소에 위도와 경도가 존재하지 않습니다. 아래의 자동생성에 존재하는 주소를 작성해주십시오.";
         console.log(address)
         $w("#text13").show();
     }
@@ -219,22 +216,30 @@ async function formSubmit() {
             request : request
         }
 
+
         const formData = new FormData();
         formData.append('request', new Blob([JSON.stringify(data.request)], {
             type: "application/json",
         }));
-        
-        formData.append('imageList', JSON.stringify(imageUrls)); // 파일 자체를 추가
-        
-        console.log(request)
+
+        // 파일 업로드 추가
+        const files = $w("#uploadButton1").value;
+
+        if (files.length > 0) {
+            //console.log("파일 업로드 시작...");
+            //const uploadResults = await $w("#uploadButton1").uploadFiles();
+            
+            formData.append('imageList', `@${files[0].name};type=image/png`); // fileObject로 파일 추가
+        }
+
         const options = {
             method: 'POST',
             headers: {
-                //'Content-Type': 'multipart/form-data',
                 'Authorization': `Bearer ${loginKey}`
             },
             body: formData
         };
+
 
         // 외부 API에 데이터 삽입 요청
         fetch(`https://asdfdsas.p-e.kr/api/job-post/company`, options)
@@ -242,7 +247,7 @@ async function formSubmit() {
             .then(async data => {
                 // 삽입 성공 시 처리
                 // const fullData = { ...project, ...data };
-                $w("#text13").text = "프로젝트 생성이 완료되었습니다.";
+                $w("#text13").text = "모집공고 생성이 완료되었습니다.";
                 $w("#text13").show();
                 console.log("데이터 삽입 성공:", data);
                 //$w('#text142').text = "회원 정보가 성공적으로 등록되었습니다.";

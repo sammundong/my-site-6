@@ -109,7 +109,7 @@ async function formSubmit(event) {
     }
 
     else if (startDate > endDate) {
-        $w("#text13").text = "시작날짜가 끝나는 날짜보다 늦습니다.";
+        $w("#text13").text = "작업 마감일이 작업 시작일보다 빠르게 설정되었습니다.";
         $w("#text13").show();
     }
 

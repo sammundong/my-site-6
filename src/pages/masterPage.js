@@ -27,12 +27,17 @@ $w.onReady(function () {
       }
       else {
         $w("#mobileButton3").label = "로그아웃"
-        $w("#mobileButton2").label = "회원가입"
+        $w("#mobileButton2").label = "내정보"
         $w("#mobileButton2").onClick(() => {
-          wixLocation.to(`/blank-2`);
+          wixLocation.to(`/general-clean-1`);
         })
         $w("#mobileButton3").onClick(() => {
           session.removeItem("loginKey");
+          $w("#mobileButton3").label = "로그인"
+          $w("#mobileButton2").label = "회원가입"
+          $w("#mobileButton2").onClick(() => {
+            wixLocation.to(`/blank-2`);
+          })
           wixLocation.to(`/`);
         })
       }
@@ -40,16 +45,27 @@ $w.onReady(function () {
     else {
       if(loginKey) {
         $w("#button21").label = "로그아웃"
+        $w("#button20").label = "내정보"
+        $w("#button20").onClick(() => {
+          wixLocation.to(`/general-clean-1`);
+        })
         $w("#button21").onClick(() => {
-        session.removeItem("loginKey");
-        $w("#button21").label = "로그인"
-        wixLocation.to(`/`);
+          session.removeItem("loginKey");
+          $w("#button21").label = "로그인"
+          $w("#button20").label = "회원가입"
+          $w("#mobileButton2").onClick(() => {
+            wixLocation.to(`/blank-2`);
+          })
+          wixLocation.to(`/`);
         })
       }
       else {
         $w("#button21").onClick(() => {
         $w("#button21").label = "로그인"
         wixLocation.to(`/로그인`);
+        })
+        $w("#button20").onClick(() => {
+          wixLocation.to(`/blank-2`);
         })
       }
     }

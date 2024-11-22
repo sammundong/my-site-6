@@ -2,6 +2,7 @@
 // “Hello, World!” Example: https://learn-code.wix.com/en/article/hello-world
 
 import wixLocation from 'wix-location-frontend';
+import wixWindow from 'wix-window';
 
 var checkPhoneCode = "false";
 var checkRepeatPhone = "false";
@@ -16,8 +17,9 @@ $w.onReady(function () {
     $w("#text176").hide()
     $w("#text173").hide()
     $w("#text188").hide()
-
-
+    
+    $w("#section2").collapse();
+    $w("#section3").collapse();
     
     
     $w("#button29").onClick(async () => {
@@ -71,6 +73,7 @@ $w.onReady(function () {
             }
             else {
                 $w("#text185").show()
+                console.log(responsePhoneData)
                 $w("#text185").text = "이미 가입한 전화번호 입니다."
             }
         }
@@ -101,8 +104,6 @@ $w.onReady(function () {
     })
 
     $w("#button26").onClick(async () => {
-        let password = $w("#input17").value;
-        let repassword = $w("#input16").value;
 
         if(checkPhoneCode == "false") {
             $w("#text185").show()
@@ -112,16 +113,7 @@ $w.onReady(function () {
             $w("#text185").show()
             $w("#text185").text = "이미 가입하신 전화번호 입니다."
         }
-        else if(checkRepeatId == "false") {
-            $w("#text176").show()
-            $w("#text176").text = "중복된 ID 입니다."
-        }
-        else if(password != repassword) {
-            $w("#text173").show()
-            $w("#text173").text = "입력하신 비밀번호와 일치하지 않습니다."
-        }
         else {
-            joinData.password = password
             joinData.manager = $w("#input20").value
             if(!joinData.manager) {
                 checkJoinData = "false"
@@ -165,44 +157,73 @@ $w.onReady(function () {
                 checkJoinData = "false"
                 $w("#button26").label = "회사 주소를 입력해주세요."
             }
-           
-            joinData.bank = $w("#dropdown3").value
-            if(!joinData.bank) {
-                checkJoinData = "false"
-                $w("#button26").label = "은행을 선택해주세요."
-            }
-            joinData.account = $w("#input19").value
-            if(!joinData.account) {
-                checkJoinData = "false"
-                $w("#button26").label = "계좌번호를 입력해주세요."
-            }
 
             if(checkJoinData == "true") {
-                const joinUrl = "https://asdfdsas.p-e.kr/api/join/company/join"
-                const joinResponse = await fetch(joinUrl, {
-                    method: "POST",
-                    headers: {
-                        'Content-Type' : 'application/json',
-                    },
-                    body: JSON.stringify(joinData)
-                })
-                const responseJoinData = await joinResponse.json()
-                
-                if (responseJoinData.message == "기업 회원 가입 완료") {
-                    $w("#button26").label = responseJoinData.message
+                $w("#section1").collapse();
+                $w("#section2").expand();
+            }
+        }
+    });
+
+    $w("#button30").onClick(async () => {  
+        joinData.bank = $w("#dropdown3").value
+        if(!joinData.bank) {
+            checkJoinData = "false"
+            $w("#button26").label = "은행을 선택해주세요."
+        }
+        joinData.account = $w("#input19").value
+        if(!joinData.account) {
+            checkJoinData = "false"
+            $w("#button26").label = "계좌번호를 입력해주세요."
+        }
+        if(checkJoinData == "true") {
+            $w("#section2").collapse();
+            $w("#section3").expand();
+        }
+    })
+
+    $w("#button34").onClick(async () => {  
+
+        let password = $w("#input17").value;
+        let repassword = $w("#input16").value;
+
+        if(checkRepeatId == "false") {
+            $w("#text176").show()
+            $w("#text176").text = "중복된 ID 입니다."
+        }
+        else if(password != repassword) {
+            $w("#text173").show()
+            $w("#text173").text = "입력하신 비밀번호와 일치하지 않습니다."
+        }
+        else if(checkJoinData == "true") {
+            joinData.password = password
+            const joinUrl = "https://asdfdsas.p-e.kr/api/join/company/join"
+            const joinResponse = await fetch(joinUrl, {
+                method: "POST",
+                headers: {
+                    'Content-Type' : 'application/json',
+                },
+                body: JSON.stringify(joinData)
+            })
+            const responseJoinData = await joinResponse.json()
+            
+            if (responseJoinData.message == "기업 회원 가입 완료") {
+                $w("#button26").label = responseJoinData.message
+                let result = await wixWindow.openLightbox("회원가입확인창");
+                if(result == "confirmed") {
                     wixLocation.to(`/로그인`);
-                }
-                else {
-                    console.log(responseJoinData)
-                    $w("#button26").label = "회원 가입 오류 : 재작성 및 재시도 부탁드립니다."
                 }
             }
             else {
-                $w("#button26").label = "회원 정보를 올바르게 입력해주세요."
+                console.log(responseJoinData)
+                $w("#button26").label = "회원 가입 오류 : 재작성 및 재시도 부탁드립니다."
             }
         }
+        else {
+            $w("#button26").label = "회원 정보를 올바르게 입력해주세요."
+        }
     })
-});
+})
 
 function validatePhoneNumber(phoneNumber) {
     const phoneRegex = /^010\d{8}$/;
