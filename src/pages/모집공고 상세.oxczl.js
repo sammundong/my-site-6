@@ -66,6 +66,9 @@ $w.onReady(async function () {
     $w("#selectionTags4").options = sectionTag;
     
     $w("#text151").text = data.preparation;
+    if(data.preparation == null) {
+      $w("#text151").text = "없음"
+    }
     
     // 이거 예외처리 생각
     var recruitNum = data.workDateResponseList[0].recruitNum;
@@ -189,6 +192,9 @@ $w.onReady(async function () {
     $w("#text167").text = data.manager
 
     $w("#text174").text = data.description
+    if(data.description == null) {
+      $w("#text174").text = "없음"
+    }
 
     $w("#button23").onClick(async () => {
       // Lightbox를 열고 결과 대기
