@@ -66,7 +66,7 @@ $w.onReady(async function () {
     $w("#selectionTags4").options = sectionTag;
     
     $w("#text151").text = data.preparation;
-    if(data.preparation == null) {
+    if(data.preparation == "") {
       $w("#text151").text = "없음"
     }
     
@@ -192,7 +192,7 @@ $w.onReady(async function () {
     $w("#text167").text = data.manager
 
     $w("#text174").text = data.description
-    if(data.description == null) {
+    if(data.description == "") {
       $w("#text174").text = "없음"
     }
 

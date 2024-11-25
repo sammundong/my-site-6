@@ -59,7 +59,7 @@ $w.onReady(async function () {
                     "region": region,
                     "manager": manager
                 }
-                console.log(project)
+                //console.log(project)
                 const options = {
                     method: 'PUT',
                     headers: {

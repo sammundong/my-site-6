@@ -29,7 +29,7 @@ $w.onReady(function () {
                 body: JSON.stringify(data)
               })
               const responseData = await loginResponse.json()
-              console.log(responseData.data)
+              //console.log(responseData.data)
               if (responseData.data.errorMessage) {
                 $w("#text157").text = responseData.data.errorMessage;
               }

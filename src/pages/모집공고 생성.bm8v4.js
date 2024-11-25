@@ -55,6 +55,12 @@ $w.onReady(function () {
                 wixLocation.to(`/`);
             })
         }
+        $w("#html1").hide();
+
+        $w("#html1").onMessage((imageData) => {
+            console.log("Received image data:", imageData);
+            imageUrls.push(imageData);
+        }); 
 
         $w("#radioGroup1").onClick((event) => {
             let selectedIndex = $w("#radioGroup1").selectedIndex;
@@ -139,6 +145,7 @@ async function formSubmit() {
     let city = '';
     let district = '';
     // let type = []
+
     console.log(address)
     if(address) {
 
@@ -216,21 +223,22 @@ async function formSubmit() {
             request : request
         }
 
-
         const formData = new FormData();
         formData.append('request', new Blob([JSON.stringify(data.request)], {
             type: "application/json",
         }));
 
         // 파일 업로드 추가
-        const files = $w("#uploadButton1").value;
+        // const files = $w("#uploadButton1").value;
 
-        if (files.length > 0) {
+        /* if (files.length > 0) {
             //console.log("파일 업로드 시작...");
             //const uploadResults = await $w("#uploadButton1").uploadFiles();
             
             formData.append('imageList', `@${files[0].name};type=image/png`); // fileObject로 파일 추가
-        }
+        } */
+  
+        formData.append('imageList', JSON.stringify(imageList));
 
         const options = {
             method: 'POST',
