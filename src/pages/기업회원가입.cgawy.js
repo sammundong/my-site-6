@@ -105,6 +105,8 @@ $w.onReady(function () {
 
     $w("#button26").onClick(async () => {
 
+        checkJoinData = "true";
+
         if(checkPhoneCode == "false") {
             $w("#text185").show()
             $w("#text185").text = "전화번호 인증해야 합니다."
@@ -148,6 +150,8 @@ $w.onReady(function () {
             }
 	        else if(!email_regex.test(joinData.email)){
                 checkJoinData = "false"
+                $w("#text188").show();
+                console.log("1");
                 $w("#text188").text = "올바른 이메일 형식을 작성해주세요."
             }
 
@@ -167,6 +171,8 @@ $w.onReady(function () {
 
     $w("#button30").onClick(async () => {  
         joinData.bank = $w("#dropdown3").value
+        checkJoinData = "true";
+        
         if(!joinData.bank) {
             checkJoinData = "false"
             $w("#button26").label = "은행을 선택해주세요."
@@ -186,6 +192,8 @@ $w.onReady(function () {
 
         let password = $w("#input17").value;
         let repassword = $w("#input16").value;
+
+        checkJoinData = "true";
 
         if(checkRepeatId == "false") {
             $w("#text176").show()
