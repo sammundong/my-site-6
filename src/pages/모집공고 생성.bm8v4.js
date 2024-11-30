@@ -39,6 +39,8 @@ import wixWindow from 'wix-window-frontend';
 var loginKey = session.getItem("loginKey");
 
 var pickupAddressList = []
+var workDate = []
+let receivedMessage = null;
 
 let imageUrls = []; // 업로드된 이미지 파일을 저장할 배열
 
@@ -62,6 +64,12 @@ $w.onReady(function () {
             imageUrls.push(imageData);
         }); 
 
+        $w("#html2").onMessage((event) => {
+            receivedMessage = event.data;
+            console.log(receivedMessage)
+            $w("#text158").text = receivedMessage.address
+        });
+
         $w("#radioGroup1").onClick((event) => {
             let selectedIndex = $w("#radioGroup1").selectedIndex;
             if(selectedIndex == 1) {
@@ -72,7 +80,7 @@ $w.onReady(function () {
             }
           });
         
-        
+        $w("#selectionTags2").options = workDate
         $w("#selectionTags1").options = pickupAddressList
 
         // 오늘 날짜 가져오기
@@ -96,6 +104,15 @@ $w.onReady(function () {
                 'label':result.formatted
             })
             $w("#selectionTags1").options = pickupAddressList
+        });
+        $w("#button26").onClick(async () => {
+            let result = await wixWindow.openLightbox("작업일자창");
+            console.log(result)
+            workDate.push({
+                'value':result,
+                'label':result
+            })
+            $w("#selectionTags2").options = workDate
         });
 
         $w("#button8").onClick(formSubmit);
@@ -123,15 +140,12 @@ async function formSubmit() {
     const recruitNum = parseInt($w('#input2').value, 10);
     const money = parseInt($w('#input3').value, 10);
     const dateList = []
-    let date = $w("#datePicker1").value;
-    let year = date.getFullYear();
-    let month = String(date.getMonth() + 1).padStart(2, '0');
-    let day = String(date.getDate()).padStart(2, '0');
-    const date_st = `${year}-${month}-${day}`;
-    dateList.push(date_st);
+    for(let i=0; i<workDate.length; i++){
+        dateList.push(workDate[i].value);
+    }
     const startTime = $w('#timePicker1').value;
     const endTime = $w('#timePicker2').value;
-    const address = $w('#addressInput1').value;
+    const address = receivedMessage;
     const pickup = ($w('#radioGroup1').value === 'False') ? false : true;
 
     const meal = ($w('#radioGroup2').value === 'false') ? false : true;
@@ -146,10 +160,10 @@ async function formSubmit() {
     let district = '';
     // let type = []
 
-    console.log(address)
-    if(address) {
+    console.log(receivedMessage)
+    if(receivedMessage) {
 
-        const addressParts = address.formatted.split(' ');
+        const addressParts = receivedMessage.address.split(' ');
     
         // 각 단어를 순회하며 시와 군/구를 확인
         addressParts.forEach(part => {
@@ -164,14 +178,8 @@ async function formSubmit() {
         console.log(district);
     }
 
-    if(title == "" || tech == "" || recruitNum == null || money == null || date == null || startTime == "" || endTime == "" || address == null || address.formatted == "") {
+    if(title == "" || tech == "" || recruitNum == null || money == null || dateList == [] || startTime == "" || endTime == "" || address == null) {
         $w("#text13").text = "빈칸을 모두 채워주세요";
-        $w("#text13").show();
-    }
-
-    else if(!address.location) {
-        $w("#text13").text = "주소에 위도와 경도가 존재하지 않습니다. 아래의 자동생성에 존재하는 주소를 작성해주십시오.";
-        console.log(address)
         $w("#text13").show();
     }
 
@@ -189,8 +197,8 @@ async function formSubmit() {
         let imageList = null;
         imageList = imageList ? imageList : [];
 
-        const latitude = address.location.latitude;
-        const longitude = address.location.longitude;
+        const latitude = address.lat;
+        const longitude = address.lng;
     
         console.log(dateList)
         // 새로운 데이터 객체 생성

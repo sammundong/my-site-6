@@ -18,6 +18,8 @@ let pji = 0;
 var loginKey = session.getItem("loginKey");
 let tech = "";
 
+let workDateList = []
+
 $w.onReady(async function () {
 
     if(loginKey) {
@@ -44,7 +46,6 @@ $w.onReady(async function () {
     console.log(data);
     tech = data.tech
 
-    let workDateList = []
     workDateList = data.workDateResponseList
 
     combinedContent = [];
@@ -144,11 +145,33 @@ function process_request(bool, jid, wid) {
   // 외부 API에 데이터 삽입 요청
   fetch('https://asdfdsas.p-e.kr/api/apply/company/process-request', options)
       .then(response => response.json())
-      .then(data => {
+      .then(async data => {
           // 삽입 성공 시 처리
           // const fullData = { ...project, ...data };
           console.log("데이터 삽입 성공:", data)
-          wixLocation.to(`/general-4?projectId=${pji}`);
+          //wixLocation.to(`/general-4?projectId=${pji}`);
+          $w('#button12').style.color = "#3971FF";
+          $w('#button12').style.borderColor = "#3971FF";
+
+          $w('#button25').style.color = "#C7C7C7";
+          $w('#button25').style.borderColor = "#C7C7C7";
+          combinedContent = [];
+          $w("#repeater8").data = [];
+          for(let i=0;i<workDateList.length;i++) {
+              const url3 = `https://asdfdsas.p-e.kr/api/apply/company/accepted/${jpi}/${workDateList[i].workDateId}?page=0&size=100`
+              await gDWGM(url3, workDateList[i].date, workDateList[i].workDateId);
+          }
+          console.log(combinedContent)
+          $w("#repeater8").data = combinedContent;
+          console.log($w("#repeater8").data)
+
+          if(combinedContent.length == 0) {
+            $w("#text142").text = "확정된 인원이 없습니다.";
+            $w("#text142").show;
+          }
+          initComponents8();
+          $w('#section2').collapse();
+          $w('#Section1Regular').expand();
           //$w('#text142').text = "회원 정보가 성공적으로 등록되었습니다.";
           memberIdList = []
           applyIdList = []

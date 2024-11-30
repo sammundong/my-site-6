@@ -8,6 +8,7 @@ import wixWindowFrontend from "wix-window-frontend";
 $w.onReady(function () {
 
 	var loginKey = session.getItem("loginKey");
+    $w("#section4").collapse();
     if(loginKey) {
       $w("#button10").label = "프로젝트 생성"
       $w("#button21").label = "로그아웃"

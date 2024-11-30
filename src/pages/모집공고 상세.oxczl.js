@@ -80,27 +80,20 @@ $w.onReady(async function () {
     $w("#text142").text = `${recruitNum} 명`;
 
     // 근무 기간
-    var startDate = data.workDateResponseList[0].date;
-    var endDate = data.workDateResponseList[data.workDateResponseList.length-1].date
     var resultDate = ""
-    for(let i=1;i<data.workDateResponseList.length;i++) {
-      var date1 = new Date(startDate);
-      var date2 = new Date(data.workDateResponseList[i].date);
-      var date3 = new Date(endDate);
-      if (date1 > date2) {
-        startDate = data.workDateResponseList[i].date;
-      }
-      if (date2 > date3) {
-        endDate = data.workDateResponseList[i].date;
+    var date1 = data.workDateResponseList[0].date
+    for(let i=0;i<data.workDateResponseList.length;i++) {
+      resultDate += data.workDateResponseList[i].date;
+      if (i != data.workDateResponseList.length-1) {
+        resultDate += ", ";
       }
     }
-    if (startDate == endDate) {
-      resultDate = startDate;
+    if(data.workDateResponseList.length == 1) {
+      $w("#text130").text = `${date1}`;
     }
     else {
-      resultDate = startDate + " ~ " + endDate;
+      $w("#text130").text = `${date1} 외 ${data.workDateResponseList.length-1}일`;
     }
-    $w("#text130").text = resultDate;
     $w("#text147").text = resultDate;
 
     //노동 시간
