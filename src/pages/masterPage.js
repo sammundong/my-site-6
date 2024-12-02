@@ -19,7 +19,7 @@ $w.onReady(function () {
         $w("#mobileButton3").label = "로그인"
         $w("#mobileButton2").label = "회원가입"
         $w("#mobileButton2").onClick(() => {
-          wixLocation.to(`/blank-2`);
+          wixLocation.to(`/회원가입`);
         })
         $w("#mobileButton3").onClick(() => {
           wixLocation.to(`/로그인`);
@@ -29,16 +29,16 @@ $w.onReady(function () {
         $w("#mobileButton3").label = "로그아웃"
         $w("#mobileButton2").label = "내정보"
         $w("#mobileButton2").onClick(() => {
-          wixLocation.to(`/general-clean-1`);
+          wixLocation.to(`/내정보`);
         })
         $w("#mobileButton3").onClick(() => {
           session.removeItem("loginKey");
           $w("#mobileButton3").label = "로그인"
           $w("#mobileButton2").label = "회원가입"
           $w("#mobileButton2").onClick(() => {
-            wixLocation.to(`/blank-2`);
+            wixLocation.to(`/회원가입`);
           })
-          wixLocation.to(`/`);
+          wixLocation.to(`/로그인`);
         })
       }
     }
@@ -47,25 +47,29 @@ $w.onReady(function () {
         $w("#button21").label = "로그아웃"
         $w("#button20").label = "내정보"
         $w("#button20").onClick(() => {
-          wixLocation.to(`/general-clean-1`);
+          wixLocation.to(`/내정보`);
         })
         $w("#button21").onClick(() => {
           session.removeItem("loginKey");
           $w("#button21").label = "로그인"
           $w("#button20").label = "회원가입"
-          $w("#mobileButton2").onClick(() => {
-            wixLocation.to(`/blank-2`);
+          $w("#button10q").label = "로그인"
+          $w("#button21").onClick(() => {
+            wixLocation.to(`/로그인`);
+          }) 
+          $w("#button20").onClick(() => {
+            wixLocation.to(`/회원가입`);
           })
-          wixLocation.to(`/`);
+          wixLocation.to(`/로그인`);
         })
       }
       else {
         $w("#button21").onClick(() => {
-        $w("#button21").label = "로그인"
-        wixLocation.to(`/로그인`);
+          $w("#button21").label = "로그인"
+          wixLocation.to(`/로그인`);
         })
         $w("#button20").onClick(() => {
-          wixLocation.to(`/blank-2`);
+          wixLocation.to(`/회원가입`);
         })
       }
     }

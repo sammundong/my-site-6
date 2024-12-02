@@ -9,24 +9,33 @@ $w.onReady(function () {
 
 	var loginKey = session.getItem("loginKey");
     $w("#section4").collapse();
+    let formFactor = wixWindowFrontend.formFactor; 
     if(loginKey) {
-      $w("#button10").label = "프로젝트 생성"
+      $w("#button10q").label = "프로젝트 생성"
       $w("#button21").label = "로그아웃"
-      $w("#button10").onClick(() => {
-        wixLocation.to(`/general-4-1`);
+      $w("#button10q").onClick(() => {
+        wixLocation.to(`/프로젝트생성`);
       })
-      $w("#button21").onClick(() => {
-        session.removeItem("loginKey");
-        $w("#button10").label = "로그인"
-        $w("#button21").label = "로그인"
-        wixLocation.to(`/로그인`);
-      })
+      if(formFactor == "Desktop") {
+        $w("#button21").onClick(() => {
+          session.removeItem("loginKey");
+          $w("#button10q").label = "로그인"
+          $w("#button21").label = "로그인"
+          $w("#button10q").onClick(() => {
+            wixLocation.to(`/로그인`);
+            console.log("1")
+          })
+          wixLocation.to(`/로그인`);
+        }) 
+      }
+      else {
+        $w("#mobileButton3").onClick(() => {
+          $w("#button10q").label = "로그인"
+        })
+      }
     }
     else {
-      $w("#button10").onClick(() => {
-        wixLocation.to(`/로그인`);
-      })
-      $w("#button21").onClick(() => {
+      $w("#button10q").onClick(() => {
         wixLocation.to(`/로그인`);
       })
     }

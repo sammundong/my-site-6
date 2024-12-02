@@ -11,12 +11,7 @@ const query = wixLocation.query;
 
 $w.onReady(async function () {
     if(loginKey) {
-        $w("#button21").label = "로그아웃"
-        $w("#button21").onClick(() => {
-          session.removeItem("loginKey");
-          $w("#button21").label = "로그인"
-          wixLocation.to(`/`);
-        })
+        
         $w("#section3").collapse();
         $w("#text13").hide();
         $w("#text160").hide();

@@ -102,6 +102,24 @@ $w.onReady(function () {
             $w("#text176").text = "이미 등록된 id입니다."
         }
     })
+    $w("#text259").hide()
+    $w("#text260").hide()
+
+    $w("#text257").onClick(async ()=> {
+        let result = await wixWindow.openLightbox("개인 정보 수집 및 이용 동의 (필수)");
+        if(result == "confirmed") {
+            joinData.privacyConsent = true;
+            $w("#text259").show();
+        }
+    })
+
+    $w("#text258").onClick(async ()=> {
+        let result = await wixWindow.openLightbox("이용 약관 동의 (필수)");
+        if(result == "confirmed") {
+            joinData.isNotification = true;
+            $w("#text260").show()
+        }
+    })
 
     $w("#button26").onClick(async () => {
 
@@ -124,10 +142,6 @@ $w.onReady(function () {
             joinData.role = "ROLE_COMPANY"
 
             joinData.deviceToken = "token"
-            joinData.isNotification = true
-
-            joinData.privacyConsent = true
-            joinData.isNotification = true
             
             joinData.companyName = $w("#input13").value 
             if(!joinData.companyName) {
@@ -175,12 +189,12 @@ $w.onReady(function () {
         
         if(!joinData.bank) {
             checkJoinData = "false"
-            $w("#button26").label = "은행을 선택해주세요."
+            $w("#button30").label = "은행을 선택해주세요."
         }
         joinData.account = $w("#input19").value
         if(!joinData.account) {
             checkJoinData = "false"
-            $w("#button26").label = "계좌번호를 입력해주세요."
+            $w("#button30").label = "계좌번호를 입력해주세요."
         }
         if(checkJoinData == "true") {
             $w("#section2").collapse();
@@ -203,6 +217,9 @@ $w.onReady(function () {
             $w("#text173").show()
             $w("#text173").text = "입력하신 비밀번호와 일치하지 않습니다."
         }
+        else if(!joinData.privacyConsent || !joinData.isNotification) {
+            $w("#button34").label = "모든 약관에 동의하지 않았습니다."
+        }
         else if(checkJoinData == "true") {
             joinData.password = password
             const joinUrl = "https://asdfdsas.p-e.kr/api/join/company/join"
@@ -216,7 +233,7 @@ $w.onReady(function () {
             const responseJoinData = await joinResponse.json()
             
             if (responseJoinData.message == "기업 회원 가입 완료") {
-                $w("#button26").label = responseJoinData.message
+                $w("#button34").label = responseJoinData.message
                 let result = await wixWindow.openLightbox("회원가입확인창");
                 if(result == "confirmed") {
                     wixLocation.to(`/로그인`);
@@ -224,11 +241,11 @@ $w.onReady(function () {
             }
             else {
                 console.log(responseJoinData)
-                $w("#button26").label = "회원 가입 오류 : 재작성 및 재시도 부탁드립니다."
+                $w("#button34").label = "회원 가입 오류 : 재작성 및 재시도 부탁드립니다."
             }
         }
         else {
-            $w("#button26").label = "회원 정보를 올바르게 입력해주세요."
+            $w("#button34").label = "회원 정보를 올바르게 입력해주세요."
         }
     })
 })

@@ -47,13 +47,8 @@ let receivedMessage = null;
 
 // 페이지가 로드될 때 실행됩니다.
 $w.onReady(function () {
-    if(loginKey) {
-      $w("#button21").label = "로그아웃"
-      $w("#button21").onClick(() => {
-        session.removeItem("loginKey");
-        $w("#button21").label = "로그인"
-        wixLocation.to(`/`);
-      })
+    if(!loginKey) {
+        wixLocation.to(`/프로젝트관리`);
     }
     console.log(loginKey)
 
@@ -160,7 +155,7 @@ async function formSubmit(event) {
                 //$w('#text142').text = "회원 정보가 성공적으로 등록되었습니다.";
                 let result = await wixWindow.openLightbox("프로젝트생성확인창");
                     if(result == "confirmed") {
-                        wixLocation.to(`/jobs-4`);
+                        wixLocation.to(`/프로젝트관리`);
                     }
             })
             .catch((error) => {

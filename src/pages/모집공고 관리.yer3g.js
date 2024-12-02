@@ -104,13 +104,12 @@ $w.onReady(async function () {
 
         console.log(clickedElement.id,"onclick");
     }) */
-    if(loginKey) {
-      $w("#button21").label = "로그아웃"
-      $w("#button21").onClick(() => {
-        session.removeItem("loginKey");
-        $w("#button21").label = "로그인"
-        wixLocation.to(`/`);
-      })
+    if(!loginKey) {
+      wixLocation.to(`/프로젝트관리`);
+    }
+    console.log(query)
+    if(!query.projectId) {
+      wixLocation.to(`/프로젝트관리`);
     }
     $w("#repeater3").data = []
     
@@ -132,7 +131,7 @@ $w.onReady(async function () {
     initComponents();
 
     $w("#button22").onClick(() => {
-      wixLocation.to(`/jobs-2?projectId=${query.projectId}`);
+      wixLocation.to(`/모집공고생성?projectId=${query.projectId}`);
     });
 
     $w("#nextButton").onClick(() => {
@@ -155,7 +154,7 @@ $w.onReady(async function () {
 });
 
 async function gDWGM_m(query, condition) {
-  const data = await getDataWithGetMethod(`https://asdfdsas.p-e.kr/api/job-post/company/list/${query.projectId}?jobPostStatus=${condition}&page=0&size=100`, loginKey);
+  const data = await getDataWithGetMethod(`https://asdfdsas.p-e.kr/api/job-post/company/list/${query.projectId}?jobPostStatus=${condition}&page=0&size=1000`, loginKey);
   console.log("가져온 데이터:", data);
   for (let i = 0; i < data.data.content.length; i++) {
     data.data.content[i]._id = `${combinedContent.length + 1}`;
@@ -234,9 +233,9 @@ function initItemDate($item, itemData) {
 
 function initItemButtion($item, itemData) {
   $item("#button23").onClick(() => {
-    wixLocation.to(`/jobs?jobPostId=${itemData.jobPostId}&projectId=${query.projectId}`);
+    wixLocation.to(`/모집공고상세?jobPostId=${itemData.jobPostId}&projectId=${query.projectId}`);
   });
   $item("#button24").onClick(() => {
-    wixLocation.to(`/blank-4?jobPostId=${itemData.jobPostId}&projectId=${query.projectId}`);
+    wixLocation.to(`/신청자내역?jobPostId=${itemData.jobPostId}&projectId=${query.projectId}`);
   });
 }

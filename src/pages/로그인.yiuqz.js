@@ -11,7 +11,7 @@ $w.onReady(function () {
 
     // To select an element by ID use: $w('#elementID')
 
-    $w('#button22').onClick(async () => {
+    $w("#button22").onClick(async () => {
         const id = $w('#input1').value;
         const password = $w('#input2').value;
         const loginUrl = "https://asdfdsas.p-e.kr/api/login"
@@ -38,13 +38,8 @@ $w.onReady(function () {
               }
               else {
                 session.setItem("loginKey", responseData.data.accessToken);
-                $w("#text157").text = "로그인이 완료되었습니다.!"
+                $w("#text157").text = "로그인이 완료되었습니다."
                 $w("#button21").label = "로그아웃"
-                $w("#button21").onClick(() => {
-                    session.removeItem("loginKey");
-                    $w("#button21").label = "로그인"
-                    wixLocation.to(`/`);
-                  })
                 wixLocation.to(`/`);
               }
         }

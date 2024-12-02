@@ -1,8 +1,27 @@
 // API Reference: https://www.wix.com/velo/reference/api-overview/introduction
 // “Hello, World!” Example: https://learn-code.wix.com/en/article/hello-world
 import wixWindowFrontend from "wix-window-frontend";
+import { session } from 'wix-storage-frontend';
+import { getDataWithGetMethod } from "backend/dataFetcher";
 
-$w.onReady(function () {
+var loginKey = session.getItem("loginKey");
+
+$w.onReady(async function () {
+
+    let receivedData = wixWindowFrontend.lightbox.getContext();
+
+    const url = `https://asdfdsas.p-e.kr/api/project/${receivedData}`
+    var { data, message } = await getDataWithGetMethod(url, loginKey);
+
+    const startDate = new Date(data.startDate); 
+    startDate.setDate(startDate.getDate() + 3);
+    const endDate = new Date(data.endDate); 
+
+    $w("#datePicker1").minDate = startDate;
+    $w("#datePicker1").maxDate = endDate;
+    $w("#datePicker1").value = startDate;
+
+
     $w("#button24").onClick(() => {
         var workDate = $w("#datePicker1").value
         let date = workDate;

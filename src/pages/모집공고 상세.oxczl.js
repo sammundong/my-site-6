@@ -15,15 +15,13 @@ var loginKey = session.getItem("loginKey");
 
 $w.onReady(async function () {
     // Write your JavaScript here
-    if(loginKey) {
-      $w("#button21").label = "로그아웃"
-      $w("#button21").onClick(() => {
-        session.removeItem("loginKey");
-        $w("#button21").label = "로그인"
-        wixLocation.to(`/`);
-      })
+    if(!loginKey) {
+      wixLocation.to(`/프로젝트관리`);
     }
     const query = wixLocation.query;
+    if(!query.jobPostId) {
+      wixLocation.to(`/프로젝트관리`);
+    }
     const url = `https://asdfdsas.p-e.kr/api/job-post/worker/${query.jobPostId}`
     var { data, message } = await getDataWithGetMethod(url, loginKey);
     
@@ -210,7 +208,7 @@ $w.onReady(async function () {
                 wixWindow.openLightbox("오류 확인창", { "message": data.data.errorMessage });
               }
               else {
-                wixLocation.to(`/general-4?projectId=${query.projectId}`);
+                wixLocation.to(`/모집공고관리?projectId=${query.projectId}`);
               }
           })
           .catch((error) => {
@@ -222,9 +220,9 @@ $w.onReady(async function () {
       }
   });
   $w("#button24").onClick(async () => {
-    wixLocation.to(`/blank-4?jobPostId=${query.jobPostId}&projectId=${query.projectId}`);
+    wixLocation.to(`/신청자내역?jobPostId=${query.jobPostId}&projectId=${query.projectId}`);
   });
   $w("#button25").onClick(async () => {
-    wixLocation.to(`/general-4?projectId=${query.projectId}`);
+    wixLocation.to(`/모집공고관리?projectId=${query.projectId}`);
   });
 });

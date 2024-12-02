@@ -9,13 +9,11 @@ var loginKey = session.getItem("loginKey");
 const query = wixLocation.query;
 
 $w.onReady(async function () {
-    if(loginKey) {
-        $w("#button21").label = "로그아웃"
-        $w("#button21").onClick(() => {
-          session.removeItem("loginKey");
-          $w("#button21").label = "로그인"
-          wixLocation.to(`/`);
-        })
+    if(!loginKey) {
+        wixLocation.to(`/프로젝트관리`);
+    }
+    if(!query) {
+        wixLocation.to(`/프로젝트관리`);
       }
     $w("#text13").hide();
     const url = `https://asdfdsas.p-e.kr/api/project/${query.projectId}`
@@ -107,7 +105,7 @@ $w.onReady(async function () {
                     $w("#text13").text = "프로젝트 수정이 완료되었습니다.";
                     $w("#text13").show();
                     //$w('#text142').text = "회원 정보가 성공적으로 등록되었습니다.";
-                    wixLocation.to(`/jobs-4`);
+                    wixLocation.to(`/프로젝트관리`);
                 })
                 .catch((error) => {
                     // 삽입 실패 시 처리

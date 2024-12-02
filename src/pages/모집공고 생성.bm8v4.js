@@ -49,14 +49,12 @@ $w.onReady(function () {
     const query = wixLocation.query;
     $w("#button22").disable();
     try {
-        if(loginKey) {
-            $w("#button21").label = "로그아웃"
-            $w("#button21").onClick(() => {
-                session.removeItem("loginKey");
-                $w("#button21").label = "로그인"
-                wixLocation.to(`/`);
-            })
+        if(!loginKey) {
+            wixLocation.to(`/프로젝트관리`);
         }
+        if(!query.projectId) {
+            wixLocation.to(`/프로젝트관리`);
+          }
         $w("#html1").hide();
 
         $w("#html1").onMessage((imageData) => {
@@ -106,7 +104,7 @@ $w.onReady(function () {
             $w("#selectionTags1").options = pickupAddressList
         });
         $w("#button26").onClick(async () => {
-            let result = await wixWindow.openLightbox("작업일자창");
+            let result = await wixWindow.openLightbox("작업일자창", query.projectId);
             console.log(result)
             workDate.push({
                 'value':result,
@@ -121,7 +119,7 @@ $w.onReady(function () {
         showErrorToUser(error.message);
     }
     $w("#button25").onClick(async () => {
-        wixLocation.to(`/general-4?projectId=${query.projectId}`);
+        wixLocation.to(`/모집공고관리?projectId=${query.projectId}`);
       });
 });
 
@@ -214,7 +212,7 @@ async function formSubmit() {
             "meal" : meal,
             "pickup" : pickup,
             "park" : park,
-            "address" : address.formatted,
+            "address" : address.address,
             "latitude" : latitude,
             "longitude" : longitude,
             "city" : city,
@@ -278,7 +276,7 @@ async function formSubmit() {
                 else {
                     let result = await wixWindow.openLightbox("모집공고생성확인창");
                     if(result == "confirmed") {
-                        wixLocation.to(`/general-4?projectId=${query.projectId}`);
+                        wixLocation.to(`/모집공고관리?projectId=${query.projectId}`);
                     }
                 }
             })

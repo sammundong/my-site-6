@@ -12,12 +12,7 @@ var loginKey = session.getItem("loginKey");
 
 $w.onReady(function () {
     if(loginKey) {
-        $w("#button21").label = "로그아웃"
-        $w("#button21").onClick(() => {
-          session.removeItem("loginKey");
-          $w("#button21").label = "로그인"
-          wixLocation.to(`/`);
-        })
+        
         $w("#text128").text = "미구현 입니다. 문의 시 QKfmsansdml@gmail.com으로 연락주십시오.";
         $w("#section1").collapse();
         $w("#button24").collapse();

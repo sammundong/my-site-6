@@ -12,12 +12,7 @@ let page = 0;
 
 $w.onReady(async function () {
   if(loginKey) {
-    $w("#button21").label = "로그아웃"
-    $w("#button21").onClick(() => {
-        session.removeItem("loginKey");
-        $w("#button21").label = "로그인"
-        wixLocation.to(`/`);
-    })
+    
     $w("#text127").hide();
     $w('#section2').collapse();
     $w("#text127").text = "프로젝트가 없습니다.";
@@ -110,10 +105,10 @@ function initComponents() {
 
   function initItemButtion($item, itemData) {
     $item("#button22").onClick(() => {
-      wixLocation.to(`/general-clean?projectId=${itemData.projectId}`);
+      wixLocation.to(`/프로젝트수정?projectId=${itemData.projectId}`);
     }) 
     $item("#button9").onClick(() => {
-      wixLocation.to(`/general-4?projectId=${itemData.projectId}`);
+      wixLocation.to(`/모집공고관리?projectId=${itemData.projectId}`);
     })
     $w("#button23").onClick(async () => {
       // Lightbox를 열고 결과 대기
@@ -137,7 +132,7 @@ function initComponents() {
               }
               else {
                 wixLocation.to(`/`);
-                wixLocation.to(`/jobs-4`);
+                wixLocation.to(`/프로젝트관리`);
               }
           })
           .catch((error) => {
