@@ -99,17 +99,34 @@ $w.onReady(async function () {
                     },
                     body: JSON.stringify(project)
                 };
-
-                if(newPassword == checkPassword) {
+            
+            
+                if(currentPassword == "") {
+                    $w("#text160").text = "현재 비밀번호를 작성해주시길 바랍니다.";
+                    $w("#text160").show();
+                }
+                else if(newPassword == "") {
+                    $w("#text160").text = "새로운 비밀번호를 작성해주시길 바랍니다.";
+                    $w("#text160").show();
+                }
+                else if(checkPassword == "") {
+                    $w("#text160").text = "비밀번호를 다시 작성해주시길 바랍니다.";
+                    $w("#text160").show();
+                }
+                else if(currentPassword != checkPassword) {
+                    $w("#text160").text = "현재 비밀번호가 아니거나 재입력된 비밀번호가 다릅니다.";
+                    $w("#text160").show();
+                }
+                else if(newPassword == checkPassword) {
                     fetch('https://asdfdsas.p-e.kr/api/member-info/password-validation', options)
                         .then(response => response.json())
                         .then(data => {
                             // 삽입 성공 시 처리
                             // const fullData = { ...project, ...data };
                             console.log("데이터 삽입 성공:", data);
-                            $w("#text13").text = "비밀번호 수정이 완료되었습니다.";
-                            $w("#text13").show();
-                            wixLocation.to(`/`);
+                            $w("#text160").text = "비밀번호 수정이 완료되었습니다.";
+                            $w("#text160").show();
+                            //wixLocation.to(`/`);
                         })
                         .catch((error) => {
                             // 삽입 실패 시 처리

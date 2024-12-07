@@ -1,0 +1,24 @@
+import { mediaManager } from 'wix-media-backend';
+
+export async function uploadImage(base64Data, fileName) {
+  // Base64 데이터에서 MIME 타입 추출
+  const mimeType = base64Data.match(/data:(.*?);base64,/)[1]; // Base64에서 MIME 타입 가져오기
+
+  // Base64 데이터를 Blob 형식으로 변환
+  const buffer = Buffer.from(base64Data.split(',')[1], 'base64');
+
+  try {
+      // Wix Media에 이미지 업로드
+      const result = await mediaManager.upload('image', buffer, fileName, {
+          mediaOptions: {
+              mimeType: mimeType, // 추출한 MIME 타입 사용
+          },
+      });
+      return result.fileUrl; // 업로드된 이미지의 URL 반환
+  } catch (error) {
+      throw new Error(`Image upload failed: ${error.message}`);
+  }
+}
+
+
+

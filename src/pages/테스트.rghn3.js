@@ -2,27 +2,31 @@
 // “Hello, World!” Example: https://learn-code.wix.com/en/article/hello-world
 
 import { session } from 'wix-storage-frontend';
-import { uploadImage } from 'backend/upload';
+import { uploadImage } from 'backend/media';
+import wixData from 'wix-data';
 
 $w.onReady(function () {
     let image = ""
+    let wixUrl = ""
     const loginKey = session.getItem("loginKey");
-    
-    $w("#uploadButton1").onChange((event) => {
-        // 사용자가 파일을 업로드하면 실행되는 코드
-        let uploadedFile = event.target.value[0]; // 업로드된 파일 정보
-        
-        if (uploadedFile) {
-            // 이미지 URL 가져오기
-            uploadedFile.getFileUrl()
-                .then((url) => {
-                    console.log("업로드된 이미지 URL:", url);
-                    image = url;
-                    // URL을 다른 곳에서 사용하거나, 예를 들어 이미지 요소에 표시
-                    //$w("#image1").src = url;
+    $w('#html1').onMessage((event) => {
+        if (event.data.type === 'imageUploaded') {
+            const imageData = event.data.data;
+
+            uploadImage(imageData.base64, imageData.name)
+                .then((imageUrl) => {
+                    console.log('Uploaded Image URL:', imageUrl);
+                    try {
+                        const staticUrl = convertWixImageToStaticUrl(imageUrl);
+                        console.log('Static URL:', staticUrl);
+                        wixUrl = imageUrl;
+                        image = staticUrl;
+                    } catch (error) {
+                        console.error(error.message);
+                    }
                 })
                 .catch((error) => {
-                    console.error("파일 URL을 가져오는 데 오류가 발생했습니다:", error);
+                    console.error('Image Upload Failed:', error);
                 });
         }
     });
@@ -32,7 +36,7 @@ $w.onReady(function () {
 
         // FormData 생성
         const request = {
-            title: "사하구sss  낙동5블럭낙동강온도 측정 센터 신축공사",
+            title: "사하",
             tech: "NORMAL",
             startTime: "18:00:00",
             endTime: "18:00:00",
@@ -60,12 +64,19 @@ $w.onReady(function () {
         };
 
         const response = await fetch(image); //url 넣으면 잘됨
+        const response1 = await fetch("https://static.wixstatic.com/media/763a49_faeb3fbab21d41c48a982317ef74aaec~mv2.png");
+        
         const blob = await response.blob();
+        const blob1 = await response1.blob();
+        console.log(blob)
+        console.log(blob1)
 
         const formData = new FormData();
-        formData.append('request', new Blob([JSON.stringify(request)], { type: "application/json" }));
-
-        const fileName = image.split('/').pop(); // URL에서 파일 이름 추출
+        formData.append('request', JSON.stringify(request));
+        
+        let fileName = wixUrl.split('/').pop(); // URL에서 파일 이름 추출
+        fileName = fileName.split('#')[0];
+        console.log(fileName)
         formData.append('imageList', blob, fileName); // FormData에 파일 추가
 
         // API 요청
@@ -94,5 +105,20 @@ $w.onReady(function () {
         }
     });
 });
+
+  function convertWixImageToStaticUrl(wixImageUrl) {
+    // wix:image://로 시작하는지 확인
+    if (wixImageUrl.startsWith('wix:image://')) {
+        // 필요한 부분 추출
+        const extractedPart = wixImageUrl.split('/')[3].split('#')[0]; // '763a49_87d35fcedda94fd29b80e0ae94875e36~mv2.png' 추출
+        // 정적 URL 생성
+        const staticUrl = `https://static.wixstatic.com/media/${extractedPart}`;
+        return staticUrl;
+    } else {
+        throw new Error('Invalid wix:image URL format');
+    }
+}
+  
+
 
 

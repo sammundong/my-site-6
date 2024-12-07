@@ -127,7 +127,7 @@ function initComponents() {
           .then(response => response.json())
           .then(data => {
               console.log("데이터 제거 성공:", data);
-              if(data.data.errorMessage) {
+              if(data.data) {
                 wixWindow.openLightbox("오류 확인창", { "message": data.data.errorMessage });
               }
               else {
