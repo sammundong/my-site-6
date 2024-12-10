@@ -12,6 +12,10 @@ var authPhoneCode;
 
 var joinData = {}
 
+let isTimerRunning = false; // 타이머 상태를 저장하는 변수
+let countdownTime = 180; // 3분(180초)
+let timerInterval; // 타이머 인터벌 저장 변수
+
 $w.onReady(function () {
     $w("#text185").hide()
     $w("#text176").hide()
@@ -38,17 +42,19 @@ $w.onReady(function () {
             const responseData = await smsResponse.json()
             authPhoneCode = responseData.data.authCode
             console.log(authPhoneCode);
+            toggleTimer();
             $w("#text185").show()
-            $w("#text185").text = "인증번호가 발송되었습니다."
+            //$w("#text185").text = "인증번호가 발송되었습니다."
         }
         else {
-            $w("#text185").show()
             $w("#text185").text = "- 제외하고 전화번호를 입력해주세요."
+            $w("#text185").show()
         }
     })
 
     $w("#button28").onClick(async () => {
         let authCode = $w("#input21").value
+        resetTimer();
         if(authCode != authPhoneCode) {
             $w("#text185").show()
             $w("#text185").text = "인증번호가 잘못되었습니다."
@@ -254,4 +260,57 @@ function validatePhoneNumber(phoneNumber) {
     const phoneRegex = /^010\d{8}$/;
     return phoneRegex.test(phoneNumber);
 }
+
+function toggleTimer() {
+    if (isTimerRunning) {
+        // 타이머가 실행 중이라면 멈추기
+        stopTimer();
+    } else {
+        // 타이머가 멈춘 상태라면 시작
+        startTimer();
+    }
+}
+
+function startTimer() {
+    // 타이머 초기화
+    clearInterval(timerInterval);
+    countdownTime = 180;
+
+    // 타이머 실행
+    timerInterval = setInterval(() => {
+        // 분과 초 계산
+        const minutes = Math.floor(countdownTime / 60);
+        const seconds = countdownTime % 60;
+
+        // 텍스트 업데이트
+        $w("#text185").text = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+
+        // 시간이 끝났으면 타이머 정지
+        if (countdownTime <= 0) {
+            clearInterval(timerInterval);
+            $w("#text185").text = "다시 인증번호 버튼을 눌러주세요.";
+            //onTimerEnd(); // 타이머 종료 시 실행할 함수 호출
+        }
+
+        countdownTime--; // 1초 감소
+    }, 1000); // 1초마다 반복
+}
+
+function stopTimer() {
+    if (timerInterval) {
+        isTimerRunning = false;
+        //$w("#startButton").label = "시작하기"; // 첫 번째 버튼 라벨을 '시작하기'로 변경
+        clearInterval(timerInterval); // 타이머 멈춤
+    }
+}
+
+function resetTimer() {
+    stopTimer(); // 타이머 멈추기
+    countdownTime = 180; // 시간 초기화 (3분)
+    const minutes = Math.floor(countdownTime / 60);
+    const seconds = countdownTime % 60;
+    //$w("#timerText").text = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`; // 텍스트 "3:00"으로 초기화
+    //$w("#startButton").label = "시작하기"; // 버튼 라벨을 '시작하기'로 변경
+}
+
 
