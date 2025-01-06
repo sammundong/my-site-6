@@ -52,7 +52,7 @@ $w.onReady(async function () {
   });
 
 async function gDWGM(condition) {
-    const data = await getDataWithGetMethod(`https://asdfdsas.p-e.kr/api/project/list?projectStatus=${condition}&page=${page}&size=100`, loginKey);
+    const data = await getDataWithGetMethod(`https://www.jikgong.p-e.kr/api/project/list?projectStatus=${condition}&page=${page}&size=100`, loginKey);
     console.log("가져온 데이터:", data);
 
     // Repeater에 데이터 연결
@@ -123,7 +123,7 @@ function initComponents() {
               },
           };
           // 외부 API에 데이터 삭제 요청
-          fetch(`https://asdfdsas.p-e.kr/api/project/${itemData.projectId}`, options)
+          fetch(`https://www.jikgong.p-e.kr/api/project/${itemData.projectId}`, options)
           .then(response => response.json())
           .then(data => {
               console.log("데이터 제거 성공:", data);

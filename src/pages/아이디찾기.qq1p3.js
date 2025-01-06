@@ -12,7 +12,7 @@ $w.onReady(function () {
 
     var phoneNum = "";
 
-    const smsurl = "https://asdfdsas.p-e.kr/api/member-info/loginId-verification"
+    const smsurl = "https://www.jikgong.p-e.kr/api/member-info/loginId-verification"
     $w("#button22").onClick(async () => {
         const company = $w('#input10').value;
         const phone = $w('#input9').value;
@@ -62,7 +62,7 @@ $w.onReady(function () {
     $w("#button23").onClick(async () => {
         let authCode = $w("#input8").value
 
-            const v_phoneUrl = "https://asdfdsas.p-e.kr/api/member-info/loginId/retrieve"
+            const v_phoneUrl = "https://www.jikgong.p-e.kr/api/member-info/loginId/retrieve"
             const data = {
                 "phone" : phoneNum,
                 "authCode" : authCode

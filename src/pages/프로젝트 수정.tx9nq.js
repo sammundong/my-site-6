@@ -16,7 +16,7 @@ $w.onReady(async function () {
         wixLocation.to(`/프로젝트관리`);
       }
     $w("#text13").hide();
-    const url = `https://asdfdsas.p-e.kr/api/project/${query.projectId}`
+    const url = `https://www.jikgong.p-e.kr/api/project/${query.projectId}`
     var { data, message } = await getDataWithGetMethod(url, loginKey);
 
     const startDate_bv = new Date(data.startDate); 
@@ -96,7 +96,7 @@ $w.onReady(async function () {
                     body: JSON.stringify(project)
                 };
                 // 외부 API에 데이터 삽입 요청
-                fetch('https://asdfdsas.p-e.kr/api/project', options)
+                fetch('https://www.jikgong.p-e.kr/api/project', options)
                 .then(response => response.json())
                 .then(data => {
                     // 삽입 성공 시 처리

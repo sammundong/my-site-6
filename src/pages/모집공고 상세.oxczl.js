@@ -22,7 +22,7 @@ $w.onReady(async function () {
     if(!query.jobPostId) {
       wixLocation.to(`/프로젝트관리`);
     }
-    const url = `https://asdfdsas.p-e.kr/api/job-post/worker/${query.jobPostId}`
+    const url = `https://www.jikgong.p-e.kr/api/job-post/worker/${query.jobPostId}`
     var { data, message } = await getDataWithGetMethod(url, loginKey);
     
     console.log(data);
@@ -200,7 +200,7 @@ $w.onReady(async function () {
               },
           };
           // 외부 API에 데이터 삭제 요청
-          fetch(`https://asdfdsas.p-e.kr/api/job-post/company/${query.jobPostId}`, options)
+          fetch(`https://www.jikgong.p-e.kr/api/job-post/company/${query.jobPostId}`, options)
           .then(response => response.json())
           .then(data => {
               console.log("데이터 제거 성공:", data);

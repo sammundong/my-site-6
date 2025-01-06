@@ -10,7 +10,7 @@ $w.onReady(async function () {
 
     let receivedData = wixWindowFrontend.lightbox.getContext();
 
-    const url = `https://asdfdsas.p-e.kr/api/project/${receivedData}`
+    const url = `https://www.jikgong.p-e.kr/api/project/${receivedData}`
     var { data, message } = await getDataWithGetMethod(url, loginKey);
 
     const startDate = new Date(data.startDate); 

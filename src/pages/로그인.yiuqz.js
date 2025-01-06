@@ -14,7 +14,7 @@ $w.onReady(function () {
     $w("#button22").onClick(async () => {
         const id = $w('#input1').value;
         const password = $w('#input2').value;
-        const loginUrl = "https://asdfdsas.p-e.kr/api/login"
+        const loginUrl = "https://www.jikgong.p-e.kr/api/login"
         const data = {
             loginId: id,
             password: password,

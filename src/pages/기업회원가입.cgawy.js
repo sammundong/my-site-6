@@ -5,7 +5,7 @@ import wixLocation from 'wix-location-frontend';
 import wixWindow from 'wix-window';
 
 var checkPhoneCode = "false";
-var checkRepeatPhone = "false";
+var checkRepeatPhone = "true" //"false";
 var checkRepeatId = "false";
 var checkJoinData = "true";
 var authPhoneCode;
@@ -25,12 +25,15 @@ $w.onReady(function () {
     $w("#section2").collapse();
     $w("#section3").collapse();
     
-    
-    $w("#button29").onClick(async () => {
+    $w("#button29").collapse();
+    $w("#button28").collapse();
+    $w("#input21").collapse();
+
+    /* $w("#button29").onClick(async () => {
         let phoneNum = $w("#input22").value
         joinData.phone = phoneNum
         if(validatePhoneNumber(phoneNum)) {
-            const smsurl = "https://asdfdsas.p-e.kr/api/join/sms-verification"
+            const smsurl = "https://jikgong.p-e.kr/api/join/sms-verification"
             const data = {phone:phoneNum}
             const smsResponse = await fetch(smsurl, {
                 method: "POST",
@@ -50,9 +53,9 @@ $w.onReady(function () {
             $w("#text185").text = "- 제외하고 전화번호를 입력해주세요."
             $w("#text185").show()
         }
-    })
+    }) */
 
-    $w("#button28").onClick(async () => {
+    /* $w("#button28").onClick(async () => {
         let authCode = $w("#input21").value
         resetTimer();
         if(authCode != authPhoneCode) {
@@ -60,7 +63,7 @@ $w.onReady(function () {
             $w("#text185").text = "인증번호가 잘못되었습니다."
         }
         else {
-            const v_phoneUrl = "https://asdfdsas.p-e.kr/api/join/validation-phone"
+            const v_phoneUrl = "https://jikgong.p-e.kr/api/join/validation-phone"
             let phoneNum = joinData.phone
             const data = {phone:phoneNum}
             const phoneResponse = await fetch(v_phoneUrl, {
@@ -83,11 +86,11 @@ $w.onReady(function () {
                 $w("#text185").text = "이미 가입한 전화번호 입니다."
             }
         }
-    })
+    }) */
 
     $w("#button27").onClick(async ()=> {
         let joinId = $w("#input18").value;
-        const v_idUrl = "https://asdfdsas.p-e.kr/api/join/validation-loginId"
+        const v_idUrl = "https://www.jikgong.p-e.kr/api/join/validation-loginId"
         const v_idData = {loginId:joinId}
         const vIdResponse = await fetch(v_idUrl, {
             method: "POST",
@@ -131,11 +134,11 @@ $w.onReady(function () {
 
         checkJoinData = "true";
 
-        if(checkPhoneCode == "false") {
+        /* if(checkPhoneCode == "false") {
             $w("#text185").show()
             $w("#text185").text = "전화번호 인증해야 합니다."
-        }
-        else if(checkRepeatPhone == "false") {
+        } */
+        if(checkRepeatPhone == "false") {
             $w("#text185").show()
             $w("#text185").text = "이미 가입하신 전화번호 입니다."
         }
@@ -150,6 +153,9 @@ $w.onReady(function () {
             joinData.deviceToken = "token"
             
             joinData.companyName = $w("#input13").value 
+
+            joinData.phone = $w("#input22").value 
+
             if(!joinData.companyName) {
                 checkJoinData = "false"
                 $w("#button26").label = "회사 이름을 선택해주세요."
@@ -228,7 +234,7 @@ $w.onReady(function () {
         }
         else if(checkJoinData == "true") {
             joinData.password = password
-            const joinUrl = "https://asdfdsas.p-e.kr/api/join/company/join"
+            const joinUrl = "https://www.jikgong.p-e.kr/api/join/company/join"
             const joinResponse = await fetch(joinUrl, {
                 method: "POST",
                 headers: {

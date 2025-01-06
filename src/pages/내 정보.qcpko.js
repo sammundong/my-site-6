@@ -15,7 +15,7 @@ $w.onReady(async function () {
         $w("#section3").collapse();
         $w("#text13").hide();
         $w("#text160").hide();
-        const url = `https://asdfdsas.p-e.kr/api/member-info/company`
+        const url = `https://www.jikgong.p-e.kr/api/member-info/company`
         var { data, message } = await getDataWithGetMethod(url, loginKey);
 
         if(!data.businessNumber) {
@@ -64,7 +64,7 @@ $w.onReady(async function () {
                     body: JSON.stringify(project)
                 };
                 // 외부 API에 데이터 삽입 요청
-                fetch('https://asdfdsas.p-e.kr/api/member-info/company', options)
+                fetch('https://www.jikgong.p-e.kr/api/member-info/company', options)
                     .then(response => response.json())
                     .then(data => {
                         // 삽입 성공 시 처리
@@ -118,7 +118,7 @@ $w.onReady(async function () {
                     $w("#text160").show();
                 }
                 else if(newPassword == checkPassword) {
-                    fetch('https://asdfdsas.p-e.kr/api/member-info/password-validation', options)
+                    fetch('https://www.jikgong.p-e.kr/api/member-info/password-validation', options)
                         .then(response => response.json())
                         .then(data => {
                             // 삽입 성공 시 처리

@@ -39,7 +39,7 @@ $w.onReady(async function () {
     jpi = query.jobPostId
     pji = query.projectId
     console.log(pji)
-    const url = `https://asdfdsas.p-e.kr/api/job-post/worker/${query.jobPostId}`
+    const url = `https://www.jikgong.p-e.kr/api/job-post/worker/${query.jobPostId}`
     var { data, message } = await getDataWithGetMethod(url, loginKey);
     console.log(data);
     tech = data.tech
@@ -49,7 +49,7 @@ $w.onReady(async function () {
     combinedContent = [];
       $w("#repeater8").data = [];
       for(let i=0;i<workDateList.length;i++) {
-          const url3 = `https://asdfdsas.p-e.kr/api/apply/company/accepted/${query.jobPostId}/${workDateList[i].workDateId}?page=0&size=1000`
+          const url3 = `https://www.jikgong.p-e.kr/api/apply/company/accepted/${query.jobPostId}/${workDateList[i].workDateId}?page=0&size=1000`
           await gDWGM(url3, workDateList[i].date, workDateList[i].workDateId);
       }
       console.log(combinedContent)
@@ -75,7 +75,7 @@ $w.onReady(async function () {
       combinedContent = [];
       $w("#repeater7").data = []
       for(let i=0;i<workDateList.length;i++) {
-          const url2 = `https://asdfdsas.p-e.kr/api/apply/company/pending/${query.jobPostId}/${workDateList[i].workDateId}?page=0&size=100`
+          const url2 = `https://www.jikgong.p-e.kr/api/apply/company/pending/${query.jobPostId}/${workDateList[i].workDateId}?page=0&size=100`
           await gDWGM(url2, workDateList[i].date, workDateList[i].workDateId);
       }
       $w("#repeater7").data = combinedContent;
@@ -100,7 +100,7 @@ $w.onReady(async function () {
       combinedContent = [];
       $w("#repeater8").data = [];
       for(let i=0;i<workDateList.length;i++) {
-          const url3 = `https://asdfdsas.p-e.kr/api/apply/company/accepted/${query.jobPostId}/${workDateList[i].workDateId}?page=0&size=100`
+          const url3 = `https://www.jikgong.p-e.kr/api/apply/company/accepted/${query.jobPostId}/${workDateList[i].workDateId}?page=0&size=100`
           await gDWGM(url3, workDateList[i].date, workDateList[i].workDateId);
       }
       console.log(combinedContent)
@@ -141,7 +141,7 @@ function process_request(bool, jid, wid) {
   };
 
   // 외부 API에 데이터 삽입 요청
-  fetch('https://asdfdsas.p-e.kr/api/apply/company/process-request', options)
+  fetch('https://www.jikgong.p-e.kr/api/apply/company/process-request', options)
       .then(response => response.json())
       .then(async data => {
           // 삽입 성공 시 처리

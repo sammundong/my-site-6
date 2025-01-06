@@ -12,7 +12,7 @@ $w.onReady(function () {
 
     var phoneNum = "";
 
-    const smsurl = "https://asdfdsas.p-e.kr/api/member-info/password-verification"
+    const smsurl = "https://www.jikgong.p-e.kr/api/member-info/password-verification"
     $w("#button22").onClick(async () => {
         const id = $w('#input10').value;
         const phone = $w('#input9').value;
@@ -35,7 +35,7 @@ $w.onReady(function () {
 
         if(validatePhoneNumber(phone)) {
             
-            await fetch(`https://asdfdsas.p-e.kr/api/member-info/password-verification`, options)
+            await fetch(`https://www.jikgong.p-e.kr/api/member-info/password-verification`, options)
                 .then(response => response.json())
                 .then(async data => {
                     console.log(data)
@@ -62,7 +62,7 @@ $w.onReady(function () {
     $w("#button23").onClick(async () => {
         let authCode = $w("#input8").value
 
-            const v_phoneUrl = "https://asdfdsas.p-e.kr/api/member-info/password-temporary"
+            const v_phoneUrl = "https://www.jikgong.p-e.kr/api/member-info/password-temporary"
             const data = {
                 "phone" : phoneNum,
                 "authCode" : authCode

@@ -154,7 +154,7 @@ $w.onReady(async function () {
 });
 
 async function gDWGM_m(query, condition) {
-  const data = await getDataWithGetMethod(`https://asdfdsas.p-e.kr/api/job-post/company/list/${query.projectId}?jobPostStatus=${condition}&page=0&size=1000`, loginKey);
+  const data = await getDataWithGetMethod(`https://www.jikgong.p-e.kr/api/job-post/company/list/${query.projectId}?jobPostStatus=${condition}&page=0&size=1000`, loginKey);
   console.log("가져온 데이터:", data);
   for (let i = 0; i < data.data.content.length; i++) {
     data.data.content[i]._id = `${combinedContent.length + 1}`;

@@ -65,7 +65,7 @@ $w.onReady(function () {
     
     // 내일 날짜 계산
     let tomorrow = new Date();
-    tomorrow.setDate(today.getDate() + 1);
+    tomorrow.setDate(today.getDate() - 365);
     
     // DatePicker의 최소 날짜를 내일로 설정
     $w("#datePicker1").minDate = tomorrow;
@@ -144,7 +144,7 @@ async function formSubmit(event) {
         };
 
         // 외부 API에 데이터 삽입 요청
-        fetch('https://asdfdsas.p-e.kr/api/project', options)
+        fetch('https://www.jikgong.p-e.kr/api/project', options)
             .then(response => response.json())
             .then(async data => {
                 // 삽입 성공 시 처리

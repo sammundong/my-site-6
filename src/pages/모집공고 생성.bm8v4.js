@@ -106,10 +106,14 @@ $w.onReady(function () {
         $w("#button26").onClick(async () => {
             let result = await wixWindow.openLightbox("작업일자창", query.projectId);
             console.log(result)
-            workDate.push({
-                'value':result,
-                'label':result
-            })
+            // 중복 여부 확인
+            let isDuplicate = workDate.some(item => item.value === result);
+            if (!isDuplicate) {
+                workDate.push({
+                    'value':result,
+                    'label':result
+                })
+            }
             $w("#selectionTags2").options = workDate
         });
 
@@ -256,7 +260,7 @@ async function formSubmit() {
 
 
         // 외부 API에 데이터 삽입 요청
-        fetch(`https://asdfdsas.p-e.kr/api/job-post/company`, options)
+        fetch(`https://www.jikgong.p-e.kr/api/job-post/company`, options)
             .then(response => response.json())
             .then(async data => {
                 // 삽입 성공 시 처리

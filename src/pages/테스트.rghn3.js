@@ -89,7 +89,7 @@ $w.onReady(function () {
         };
 
         try {
-            const response = await fetch("https://asdfdsas.p-e.kr/api/job-post/company", options);
+            const response = await fetch("https://www.jikgong.p-e.kr/api/job-post/company", options);
             const data = await response.json();
 
             if (response.ok) {
