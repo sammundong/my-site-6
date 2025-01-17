@@ -30,7 +30,8 @@ $w.onReady(function () {
               })
               const responseData = await loginResponse.json()
               //console.log(responseData.data)
-              if (responseData.data.errorMessage) {
+              console.log(responseData)
+              if (responseData.data) {
                 $w("#text157").text = responseData.data.errorMessage;
               }
               else if (responseData.data.role == "ROLE_WORKER") {

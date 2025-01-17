@@ -15,6 +15,7 @@ var joinData = {}
 let isTimerRunning = false; // 타이머 상태를 저장하는 변수
 let countdownTime = 180; // 3분(180초)
 let timerInterval; // 타이머 인터벌 저장 변수
+let authPhCode = 0;
 
 $w.onReady(function () {
     $w("#text185").hide()
@@ -45,6 +46,7 @@ $w.onReady(function () {
             const responseData = await smsResponse.json()
             authPhoneCode = responseData.data.authCode
             console.log(authPhoneCode);
+            authPhCode = authPhoneCode
             toggleTimer();
             $w("#text185").show()
             //$w("#text185").text = "인증번호가 발송되었습니다."
@@ -58,7 +60,7 @@ $w.onReady(function () {
     /* $w("#button28").onClick(async () => {
         let authCode = $w("#input21").value
         resetTimer();
-        if(authCode != authPhoneCode) {
+        if(authCode != authPhoneCode || authPhCode == authPhoneCode) {
             $w("#text185").show()
             $w("#text185").text = "인증번호가 잘못되었습니다."
         }
@@ -196,18 +198,18 @@ $w.onReady(function () {
     });
 
     $w("#button30").onClick(async () => {  
-        joinData.bank = $w("#dropdown3").value
+        //joinData.bank = $w("#dropdown3").value
         checkJoinData = "true";
         
-        if(!joinData.bank) {
+        /* if(!joinData.bank) {
             checkJoinData = "false"
             $w("#button30").label = "은행을 선택해주세요."
-        }
-        joinData.account = $w("#input19").value
-        if(!joinData.account) {
+        } */
+        //joinData.account = $w("#input19").value
+        /* if(!joinData.account) {
             checkJoinData = "false"
             $w("#button30").label = "계좌번호를 입력해주세요."
-        }
+        } */
         if(checkJoinData == "true") {
             $w("#section2").collapse();
             $w("#section3").expand();
@@ -270,7 +272,9 @@ function validatePhoneNumber(phoneNumber) {
 function toggleTimer() {
     if (isTimerRunning) {
         // 타이머가 실행 중이라면 멈추기
-        stopTimer();
+        //stopTimer();
+        resetTimer()
+        //한번 확인해보기
     } else {
         // 타이머가 멈춘 상태라면 시작
         startTimer();
@@ -318,5 +322,7 @@ function resetTimer() {
     //$w("#timerText").text = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`; // 텍스트 "3:00"으로 초기화
     //$w("#startButton").label = "시작하기"; // 버튼 라벨을 '시작하기'로 변경
 }
+
+
 
 
