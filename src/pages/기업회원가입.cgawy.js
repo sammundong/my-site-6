@@ -43,6 +43,7 @@ $w.onReady(function () {
                 },
                 body: JSON.stringify(data)
             })
+            $w("#button28").enable()
             const responseData = await smsResponse.json()
             authPhoneCode = responseData.data.authCode
             console.log(authPhoneCode);
@@ -60,9 +61,12 @@ $w.onReady(function () {
     /* $w("#button28").onClick(async () => {
         let authCode = $w("#input21").value
         resetTimer();
-        if(authCode != authPhoneCode || authPhCode == authPhoneCode) {
+        if(authCode != authPhoneCode) {
             $w("#text185").show()
             $w("#text185").text = "인증번호가 잘못되었습니다."
+        }
+        else if(countdownTime =< 0) {
+            $w("#button28").disable()
         }
         else {
             const v_phoneUrl = "https://jikgong.p-e.kr/api/join/validation-phone"
@@ -235,7 +239,11 @@ $w.onReady(function () {
             $w("#button34").label = "모든 약관에 동의하지 않았습니다."
         }
         else if(checkJoinData == "true") {
+            console.log(joinData);
             joinData.password = password
+            //joinData.role = "ROLE_COMPANY"
+            //joinData.requestContent = "직공 서비스에 가입하고 싶습니다."
+
             const joinUrl = "https://www.jikgong.p-e.kr/api/join/company/join"
             const joinResponse = await fetch(joinUrl, {
                 method: "POST",

@@ -16,7 +16,7 @@ $w.onReady(function () {
         const password = $w('#input2').value;
         const loginUrl = "https://www.jikgong.p-e.kr/api/login"
         const data = {
-            loginId: id,
+            loginIdOrPhone: id,
             password: password,
             deviceToken: "string"
         }
@@ -31,7 +31,7 @@ $w.onReady(function () {
               const responseData = await loginResponse.json()
               //console.log(responseData.data)
               console.log(responseData)
-              if (responseData.data) {
+              if (responseData.data.errorMessage) {
                 $w("#text157").text = responseData.data.errorMessage;
               }
               else if (responseData.data.role == "ROLE_WORKER") {
