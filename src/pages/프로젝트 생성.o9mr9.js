@@ -65,7 +65,7 @@ $w.onReady(function () {
     
     // 내일 날짜 계산
     let tomorrow = new Date();
-    tomorrow.setDate(today.getDate() - 365);
+    tomorrow.setDate(today.getDate() + 3);
     
     // DatePicker의 최소 날짜를 내일로 설정
     $w("#datePicker1").minDate = tomorrow;

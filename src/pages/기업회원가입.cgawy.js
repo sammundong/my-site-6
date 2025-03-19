@@ -117,14 +117,18 @@ $w.onReady(function () {
             $w("#text176").text = "이미 등록된 id입니다."
         }
     })
-    $w("#text259").hide()
-    $w("#text260").hide()
 
     $w("#text257").onClick(async ()=> {
         let result = await wixWindow.openLightbox("개인 정보 수집 및 이용 동의 (필수)");
         if(result == "confirmed") {
             joinData.privacyConsent = true;
-            $w("#text259").show();
+        }
+    })
+
+    $w("#text261").onClick(async ()=> {
+        let result = await wixWindow.openLightbox("개인 정보 수집 및 이용 동의 (필수)");
+        if(result == "confirmed") {
+            joinData.privacyConsent = true;
         }
     })
 
@@ -132,7 +136,13 @@ $w.onReady(function () {
         let result = await wixWindow.openLightbox("이용 약관 동의 (필수)");
         if(result == "confirmed") {
             joinData.isNotification = true;
-            $w("#text260").show()
+        }
+    })
+
+    $w("#text262").onClick(async ()=> {
+        let result = await wixWindow.openLightbox("이용 약관 동의 (필수)");
+        if(result == "confirmed") {
+            joinData.isNotification = true;
         }
     })
 
@@ -281,7 +291,8 @@ function toggleTimer() {
     if (isTimerRunning) {
         // 타이머가 실행 중이라면 멈추기
         //stopTimer();
-        resetTimer()
+        resetTimer();
+        startTimer();
         //한번 확인해보기
     } else {
         // 타이머가 멈춘 상태라면 시작
